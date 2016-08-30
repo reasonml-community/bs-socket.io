@@ -15,7 +15,9 @@ socket#on
           inject (
             Js.string (
               Js.to_string (get chatarea "innerHTML") ^
-                "<div><span style='color:red'>Other</span>: " ^ s ^ "</div>"
+                "<div><span style='color:red'>Other</span>: " ^
+                Js.to_string (meth_call s "toString" [||]) ^
+                "</div>"
             )
           )
         )
@@ -30,12 +32,5 @@ meth_call
   "addEventListener"
   [|
     inject (Js.string "click"),
-    inject (
-      Js.wrap_callback (
-        fun e => {
-          ignore @@ meth_call (variable "console") "log" [|inject (get e "target")|];
-          socket#emit "message" (Js.to_string (get chatinput "value"))
-        }
-      )
-    )
+    inject (Js.wrap_callback (fun e => socket#emit "message" (get chatinput "value")))
   |];
