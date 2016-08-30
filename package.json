@@ -1,5 +1,5 @@
 {
-  "name": "ReSocket.io",
+  "name": "ReSocketIO",
   "version": "0.0.1",
   "description": "socket.io in Reason",
   "jengaboot": {
