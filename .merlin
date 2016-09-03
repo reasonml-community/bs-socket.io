@@ -16,16 +16,16 @@ S src
 S ./node_modules/**/src
 
 # B stands for build (artifacts). We generate ours into _build
-B ./_build/*
+B ./_build/* node_modules/bs-platform/lib/ocaml
 
 # PKG lists packages found through ocamlfind (aka findlib), a tool for finding
 # the location of third-party dependencies. For us, most of our third-party deps
 # reside in `node_modules/` (made visible to Merlin through the S command
 # above); this PKG command is for discovering the opam/ocamlfind packages.
-PKG js_of_ocaml
+# PKG js_of_ocaml
 
 # FLG is the set of flags to pass to Merlin, as if it used ocamlc to compile and
 # understand our sources. You don't have to understand what these flags are for
 # now; but if you're curious, go check the jengaroot.ml that generated this
 # .merlin at https://github.com/chenglou/jengaboot
-FLG -w -30 -w -40 -open Top
+FLG -w -30 -w -40 -ppx /Users/sansouci/Desktop/resocket.io/node_modules/bs-platform/bin/bsppx

@@ -2,17 +2,18 @@
   "name": "ReSocketIO",
   "version": "0.0.1",
   "description": "socket.io in Reason",
-  "jengaboot": {
-    "ocamlfindDependencies": {
-      "js_of_ocaml": "*"
-    }
+  "scripts": {
+    "build": "mkdir -p _build && bsc -pp refmt -impl src/client.re && mv src/client.cm* _build/ && mv src/client.js _build/client.js",
+    "example": "mkdir -p _build/top && refmt -parse re -print ml src/example.re > _build/top/example.ml && refmt -parse re -print ml src/client.re > _build/top/client.ml && refmt -parse re -print ml src/web.re > _build/top/web.ml && cd _build/top && bsc -bs-package-name ReSocketIO -c -bs-files *.ml && ../../node_modules/webpack/bin/webpack.js example.js --output-file app.js"
   },
   "dependencies": {
-    "socket.io": "^1.4.8"
+    "bs-platform": "^1.0.0",
+    "socket.io": "^1.4.8",
+    "reason-js": "git://github.com/chenglou/reason-js.git"
   },
   "devDependencies": {
-    "jengaboot": "git://github.com/bsansouci/jengaboot.git#tmp",
-    "express": "^4.14.0"
+    "express": "^4.14.0",
+    "webpack": "^1.13.2"
   },
   "author": "Benjamin San Souci <benjamin.sansouci@gmail.com>"
 }
