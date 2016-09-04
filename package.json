@@ -4,7 +4,8 @@
   "description": "socket.io in Reason",
   "scripts": {
     "build": "mkdir -p _build && bsc -pp refmt -impl src/client.re && mv src/client.cm* _build/ && mv src/client.js _build/client.js",
-    "example": "mkdir -p _build/top && refmt -parse re -print ml src/example.re > _build/top/example.ml && refmt -parse re -print ml src/client.re > _build/top/client.ml && refmt -parse re -print ml src/web.re > _build/top/web.ml && cd _build/top && bsc -bs-package-name ReSocketIO -c -bs-files *.ml && ../../node_modules/webpack/bin/webpack.js example.js --output-file app.js"
+    "example": "rm -rf _build/top && mkdir -p _build/top && refmt -parse re -print ml src/example.re > _build/top/example.ml && refmt -parse re -print ml src/client.re > _build/top/client.ml && refmt -parse re -print ml src/web.re > _build/top/web.ml && cd _build/top && bsc -bs-package-name ReSocketIO -c -bs-files *.ml && ../../node_modules/webpack/bin/webpack.js example.js --output-file app.js",
+    "server": "rm -rf _build/server && rm -f server.js mainserver.js && mkdir -p _build/server && refmt -parse re -print ml src/server.re > _build/server/server.ml && refmt -parse re -print ml mainserver.re > _build/server/mainserver.ml && cd _build/server && bsc -c -bs-files *.ml && cp mainserver.js ../../mainserver.js && cp server.js ../../server.js"
   },
   "dependencies": {
     "bs-platform": "^1.0.0",

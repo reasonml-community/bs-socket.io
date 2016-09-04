@@ -14,7 +14,7 @@ Client.on
       let innerHTML = Web.Element.getInnerHTML chatarea;
       Web.Element.setInnerHTML
         chatarea
-        (innerHTML ^ "<div><span style='color:red'>Other</span>: " ^ Web.toString x ^ "</div>")
+        (innerHTML ^ "<div><span style='color:red'>Message</span>: " ^ Web.toString x ^ "</div>")
     }
   );
 
