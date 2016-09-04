@@ -8,31 +8,36 @@ let socket = CustomClient.create ();
 
 let chatarea = Web.Document.getElementById "chatarea";
 
+/* CustomClient.on
+   socket
+   Common.Message
+   (
+     fun x => {
+       let innerHTML = Web.Element.getInnerHTML chatarea;
+       Web.Element.setInnerHTML
+         chatarea
+         (innerHTML ^ "<div><span style='color:red'>Message</span>: " ^ Web.toString x ^ "</div>")
+     }
+   ); */
 CustomClient.on
   socket
-  Common.Message
   (
-    fun x => {
-      let innerHTML = Web.Element.getInnerHTML chatarea;
-      Web.Element.setInnerHTML
-        chatarea
-        (innerHTML ^ "<div><span style='color:red'>Message</span>: " ^ Web.toString x ^ "</div>")
-    }
-  );
-
-CustomClient.on
-  socket
-  Common.MessageOnEnter
-  (
-    fun x => {
-      let innerHTML = Web.Element.getInnerHTML chatarea;
-      Web.Element.setInnerHTML
-        chatarea
-        (
-          innerHTML ^
-          "<div><span style='color:red'>MessageOnEnter</span>: " ^ Web.toString x ^ "</div>"
-        )
-    }
+    fun t x =>
+      switch t {
+      | Common.Message =>
+        let innerHTML = Web.Element.getInnerHTML chatarea;
+        Web.Element.setInnerHTML
+          chatarea
+          (innerHTML ^ "<div><span style='color:red'>Message</span>: " ^ Web.toString x ^ "</div>")
+      | Common.MessageOnEnter =>
+        let innerHTML = Web.Element.getInnerHTML chatarea;
+        Web.Element.setInnerHTML
+          chatarea
+          (
+            innerHTML ^
+            "<div><span style='color:red'>MessageOnEnter</span>: " ^ Web.toString x ^ "</div>"
+          )
+      }
   );
 
 let sendbutton = Web.Document.getElementById "sendbutton";

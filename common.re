@@ -11,3 +11,5 @@ let stringify t =>
   | Message => "message"
   | MessageOnEnter => "otherthing"
   };
+
+let all = [Message, MessageOnEnter];

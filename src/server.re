@@ -2,7 +2,12 @@
  * vim: set ft=rust:
  * vim: set ft=reason:
  */
-module type M_t = {type t; let stringify: t => string;};
+/* Same as Server's.
+ * `all` is basically a hack which relies on the user listing out all the possible event types that are
+ * in use. We internally map over them and hook up event handlers for each one. This allows ocaml's
+ * typechecker to prevent you from forgetting to listen for some event.
+ */
+module type M_t = {type t; let stringify: t => string; let all: list t;};
 
 type serverT;
 
@@ -61,7 +66,7 @@ let module Server (M: M_t) => {
   let module Socket = {
     /* Here 'a means that you can send anything you want, and it'll depend on Bucklescript */
     external _on : socketT => string => ('a => unit [@bs]) => unit = "on" [@@bs.send];
-    let on socket t cb => _on socket (M.stringify t) cb;
+    let on socket func => ignore @@ List.map (fun t => _on socket (M.stringify t) (func t)) M.all;
     external _emit : socketT => string => 'a => unit = "emit" [@@bs.send];
     let emit socket t obj => _emit socket (M.stringify t) obj;
     type broadcastT;

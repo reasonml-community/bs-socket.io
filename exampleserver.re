@@ -58,8 +58,9 @@ InnerServer.onConnect
         Socket.broadcast socket typ data;
         Socket.emit socket typ data
       };
-      Socket.on socket Common.Message (pipe Common.Message);
-      Socket.on socket Common.MessageOnEnter (pipe Common.MessageOnEnter)
+      Socket.on socket pipe
+      /* Socket.on socket Common.Message (pipe Common.Message);
+         Socket.on socket Common.MessageOnEnter (pipe Common.MessageOnEnter) */
     }
   );
 
