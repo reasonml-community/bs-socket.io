@@ -45,8 +45,6 @@ let module InnerServer = Server.Server Common;
 
 let io = InnerServer.createWithHttp http;
 
-InnerServer.close io;
-
 InnerServer.onConnect
   io
   (
