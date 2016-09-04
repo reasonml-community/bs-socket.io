@@ -1,3 +1,7 @@
+/*
+ * vim: set ft=rust:
+ * vim: set ft=reason:
+ */
 let socket = Client.create ();
 
 let chatarea = Web.Document.getElementById "chatarea";

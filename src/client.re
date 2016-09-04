@@ -1,3 +1,8 @@
+/*
+ * vim: set ft=rust:
+ * vim: set ft=reason:
+ */
+
 type t;
 
 external create : unit => t = "io" [@@bs.new];

@@ -1,4 +1,7 @@
 /**
+ * vim: set ft=rust:
+ * vim: set ft=reason:
+ *
  * All credit goes to Cheng Lou. It was just too hard to figure out jengaboot + bucklescript for now.
  * Copy pasted from https://github.com/chenglou/reason-js
  **/
