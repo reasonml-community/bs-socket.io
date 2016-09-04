@@ -2,13 +2,15 @@
  * vim: set ft=rust:
  * vim: set ft=reason:
  */
-let socket = Client.create ();
+let module CustomClient = Client.Client Common;
+
+let socket = CustomClient.create ();
 
 let chatarea = Web.Document.getElementById "chatarea";
 
-Client.on
+CustomClient.on
   socket
-  "message"
+  Common.Message
   (
     fun x => {
       let innerHTML = Web.Element.getInnerHTML chatarea;
@@ -18,13 +20,39 @@ Client.on
     }
   );
 
+CustomClient.on
+  socket
+  Common.MessageOnEnter
+  (
+    fun x => {
+      let innerHTML = Web.Element.getInnerHTML chatarea;
+      Web.Element.setInnerHTML
+        chatarea
+        (
+          innerHTML ^
+          "<div><span style='color:red'>MessageOnEnter</span>: " ^ Web.toString x ^ "</div>"
+        )
+    }
+  );
+
 let sendbutton = Web.Document.getElementById "sendbutton";
 
 let chatinput = Web.Document.getElementById "chatinput";
 
 Web.Element.addEventListener
-  sendbutton "click" (fun _ => Client.emit socket "message" (Web.Element.getValue chatinput));
+  sendbutton
+  "click"
+  (fun _ => CustomClient.emit socket Common.Message (Web.Element.getValue chatinput));
 
+Web.Document.addEventListener
+  "keyup"
+  (
+    fun e =>
+      if (Web.Event.isEnterKey e) {
+        CustomClient.emit socket Common.MessageOnEnter (Web.Element.getValue chatinput);
+        Web.Element.setValue chatinput ""
+      }
+  );
 /*
  /* same example with js_of_ocaml */
 

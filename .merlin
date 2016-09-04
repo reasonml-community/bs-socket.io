@@ -8,6 +8,7 @@
 
 # S is the merlin flag for source files
 S src
+S ./
 
 # Include all the third-party sources too. You might notice that we've put a
 # .merlin into each node_modules package. This is subtle; in short, it's to make
@@ -16,7 +17,8 @@ S src
 S ./node_modules/**/src
 
 # B stands for build (artifacts). We generate ours into _build
-B ./_build/* node_modules/bs-platform/lib/ocaml
+B ./_build/*
+B node_modules/bs-platform/lib/ocaml
 
 # PKG lists packages found through ocamlfind (aka findlib), a tool for finding
 # the location of third-party dependencies. For us, most of our third-party deps

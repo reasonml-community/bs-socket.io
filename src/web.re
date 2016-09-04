@@ -5,23 +5,31 @@
  * All credit goes to Cheng Lou. It was just too hard to figure out jengaboot + bucklescript for now.
  * Copy pasted from https://github.com/chenglou/reason-js
  **/
-
 external toString : Js.t 'a => string = "toString" [@@bs.send];
+
+let module Event = {
+  type eventT;
+  let isEnterKey: eventT => bool = [%bs.raw
+    {|
+    function (e) {
+      return e.which === 13;
+    }
+  |}
+  ];
+};
 
 let module Element = {
   type elementT;
   external setInnerHTML : elementT => string => unit = "innerHTML" [@@bs.set];
   external getInnerHTML : elementT => string = "innerHTML" [@@bs.get];
-
   external setValue : elementT => string => unit = "value" [@@bs.set];
   external getValue : elementT => string = "value" [@@bs.get];
-
-  type eventT;
-  external addEventListener : elementT => string => (eventT => unit [@bs]) => unit = "addEventListener" [@@bs.send];
+  external addEventListener : elementT => string => (Event.eventT => unit [@bs]) => unit = "addEventListener" [@@bs.send];
 };
 
 let module Document = {
   external getElementById : string => Element.elementT = "document.getElementById" [@@bs.val];
+  external addEventListener : string => (Event.eventT => unit [@bs]) => unit = "document.addEventListener" [@@bs.val];
 };
 
 let module Window = {
