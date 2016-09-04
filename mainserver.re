@@ -27,7 +27,7 @@ let app = Express.express ();
 
 let http = Http.create app;
 
-Express.use app (Express.static __dirname);
+Express.use app (Express.static (Path.join __dirname));
 
 Express.get app "/" (fun req res => Express.sendFile res "index.html" [%bs.obj {root: __dirname}]);
 
