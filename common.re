@@ -4,12 +4,14 @@
  */
 type t =
   | Message
-  | MessageOnEnter;
+  | MessageOnEnter
+  | UnusedMessageType;
 
 let stringify t =>
   switch t {
-  | Message => "message"
-  | MessageOnEnter => "otherthing"
+  | Message => "Message"
+  | MessageOnEnter => "MessageOnEnter"
+  | UnusedMessageType => "UnusedMessageType"
   };
 
-let all = [Message, MessageOnEnter];
+let all = [Message, MessageOnEnter, UnusedMessageType];

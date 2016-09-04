@@ -56,11 +56,11 @@ InnerServer.onConnect
       let socket = Socket.join socket "someRoom" (fun e => print_endline e);
       let pipe typ data => {
         Socket.broadcast socket typ data;
-        Socket.emit socket typ data
+        Socket.emit socket typ data;
+        Socket.emit socket Common.UnusedMessageType data
       };
+      /* Polymorphic pipe which actually knows about Common.t from InnerServer */
       Socket.on socket pipe
-      /* Socket.on socket Common.Message (pipe Common.Message);
-         Socket.on socket Common.MessageOnEnter (pipe Common.MessageOnEnter) */
     }
   );
 
