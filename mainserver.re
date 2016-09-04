@@ -1,3 +1,7 @@
+/*
+ * vim: set ft=rust:
+ * vim: set ft=reason:
+ */
 external __dirname : string = "" [@@bs.val];
 
 let module Path = {
