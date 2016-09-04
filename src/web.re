@@ -4,7 +4,6 @@
  **/
 
 external toString : Js.t 'a => string = "toString" [@@bs.send];
-external toJs : string => Js.t string = "";
 
 let module Element = {
   type elementT;

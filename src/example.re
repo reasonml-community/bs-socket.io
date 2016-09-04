@@ -19,9 +19,7 @@ let sendbutton = Web.Document.getElementById "sendbutton";
 let chatinput = Web.Document.getElementById "chatinput";
 
 Web.Element.addEventListener
-  sendbutton
-  "click"
-  (fun _ => Client.emit socket "message" (Web.Element.getValue chatinput));
+  sendbutton "click" (fun _ => Client.emit socket "message" (Web.Element.getValue chatinput));
 
 /*
  /* same example with js_of_ocaml */
