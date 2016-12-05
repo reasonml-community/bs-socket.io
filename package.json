@@ -11,29 +11,10 @@
     "server": "rm -rf _build/server && rm -f server.js exampleserver.js namespace.js client.js common.js && mkdir -p _build/server && refmt -parse re -print ml common.re > _build/server/common.ml && refmt -parse re -print ml src/client.re > _build/server/client.ml && refmt -parse re -print ml src/namespace.re > _build/server/namespace.ml && refmt -parse re -print ml src/server.re > _build/server/server.ml && refmt -parse re -print ml exampleserver.re > _build/server/exampleserver.ml && cd _build/server && bsc -c -bs-files *.ml && cp exampleserver.js ../../exampleserver.js && cp server.js ../../server.js && cp namespace.js ../../namespace.js && cp client.js ../../client.js && cp common.js ../../common.js"
   },
   "dependencies": {
-    "bs-platform": "git://github.com/bloomberg/bucklescript.git",
     "socket.io": "^1.4.8",
-    "reason-js": "git://github.com/chenglou/reason-js.git",
-    "@opam-alpha/merlin": "^ 2.5.0",
-    "dependency-env": "https://github.com/npm-ml/dependency-env.git",
-    "nopam": "https://github.com/yunxing/nopam.git",
-    "rebel": "https://github.com/reasonml/rebel.git",
-    "reason": "https://github.com/facebook/reason.git"
+    "reason-js": "git://github.com/chenglou/reason-js.git"
   },
-   "rebel": {
-    "targets": [
-      {
-        "target": "client",
-        "engine": "bucklescript",
-        "entry": "src/client.re"
-      },
-       {
-        "target": "server",
-        "engine": "bucklescript",
-        "entry": "src/server.re"
-      }
-    ]
-  },
+  "rebel": {},
   "devDependencies": {
     "express": "^4.14.0",
     "webpack": "^1.13.2"
