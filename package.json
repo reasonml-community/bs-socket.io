@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "socket.io in Reason",
   "scripts": {
-    "postinstall": "npm run build",
     "test": "echo 'No tests yet.  All good :D",
     "build": "eval $(dependencyEnv) && nopam && rebel",
     "all": "npm run client && npm run server",
