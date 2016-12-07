@@ -4,16 +4,34 @@
   "description": "socket.io in Reason",
   "scripts": {
     "test": "echo 'No tests yet.  All good :D",
-    "build": "eval $(dependencyEnv) && nopam && rebel",
+    "build": "eval $(dependencyEnv) && nopam && rebel -verbose -show-actions-run-verbose",
     "all": "npm run client && npm run server",
     "client": "rm -rf _build/top && mkdir -p _build/top && refmt -parse re -print ml common.re > _build/top/common.ml && refmt -parse re -print ml exampleclient.re > _build/top/exampleclient.ml && refmt -parse re -print ml src/client.re > _build/top/client.ml && refmt -parse re -print ml src/web.re > _build/top/web.ml && cd _build/top && bsc -bs-package-name ReSocketIO -c -bs-files *.ml && ../../node_modules/webpack/bin/webpack.js exampleclient.js --output-file app.js",
-    "server": "rm -rf _build/server && rm -f server.js exampleserver.js namespace.js client.js common.js && mkdir -p _build/server && refmt -parse re -print ml common.re > _build/server/common.ml && refmt -parse re -print ml src/client.re > _build/server/client.ml && refmt -parse re -print ml src/namespace.re > _build/server/namespace.ml && refmt -parse re -print ml src/server.re > _build/server/server.ml && refmt -parse re -print ml exampleserver.re > _build/server/exampleserver.ml && cd _build/server && bsc -c -bs-files *.ml && cp exampleserver.js ../../exampleserver.js && cp server.js ../../server.js && cp namespace.js ../../namespace.js && cp client.js ../../client.js && cp common.js ../../common.js"
+    "server": "rm -rf _build/server && rm -f server.js exampleserver.js namespace.js client.js common.js && mkdir -p _build/server && refmt -parse re -print ml common.re > _build/server/common.ml && refmt -parse re -print ml src/client.re > _build/server/client.ml && refmt -parse re -print ml src/namespace.re > _build/server/namespace.ml && refmt -parse re -print ml src/server.re > _build/server/server.ml && refmt -parse re -print ml exampleserver.re > _build/server/exampleserver.ml && cd _build/server && bsc -c -bs-files *.ml && cp exampleserver.js ../../exampleserver.js && cp server.js ../../server.js && cp namespace.js ../../namespace.js && cp client.js ../../client.js && cp common.js ../../common.js",
+    "ocamldep": "eval $(dependencyEnv) && nopam && ocamlfind ocamldep -pp node_modules/reason/refmt_impl.native -ml-synonym .re -mli-synonym .rei -modules -one-line src/exampleserver.re"
   },
   "dependencies": {
     "socket.io": "^1.4.8",
-    "reason-js": "git://github.com/chenglou/reason-js.git"
+    "reason-js": "git://github.com/chenglou/reason-js.git",
+    "@opam-alpha/merlin": "^ 2.5.0",
+    "dependency-env": "https://github.com/npm-ml/dependency-env.git",
+    "nopam": "https://github.com/yunxing/nopam.git",
+    "rebel": "https://github.com/bsansouci/rebel-bin.git",
+    "reason": "https://github.com/facebook/reason.git"
   },
-  "rebel": {},
+  "rebel": {
+    "targets": [
+      {
+        "target": "client",
+        "engine": "bucklescript",
+        "entry": "src/exampleclient.re"
+      },{
+        "target": "server",
+        "engine": "bucklescript",
+        "entry": "src/exampleserver.re"
+      }
+    ]
+  },
   "devDependencies": {
     "express": "^4.14.0",
     "webpack": "^1.13.2"
