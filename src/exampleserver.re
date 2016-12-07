@@ -58,7 +58,7 @@ InnerServer.onConnect
         Socket.emit socket Common.UnusedMessageType data
       };
       /* Polymorphic pipe which actually knows about Common.t from InnerServer */
-      Socket.on socket pipe
+      Socket.on_not_ready_yet socket pipe
     }
   );
 

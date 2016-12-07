@@ -9,7 +9,7 @@ let socket = CustomClient.create ();
 let chatarea = Web.Document.getElementById "chatarea";
 
 /* API is great because it forces you to exhaustively match on all possible kinds of messages */
-CustomClient.on
+CustomClient.on_not_ready_yet
   socket
   (
     fun t x =>
