@@ -9,24 +9,24 @@
  * because the latter will give a merlin error. It doesn't seem to be valid in ocaml to bind to just
  * values instead of functions.
  */
-let __dirname: string = [%bs.raw "__dirname"];
-
 /* Created a bunch of modules to keep things clean. This is just for demo purposes. */
-let module Path = {
-  external join : string => string = "join" [@@bs.module "path"];
+module Path = {
+  type pathT;
+  external path : pathT = "" [@@bs.module];
+  external join : pathT => Js.undefined string => array string => string = "join" [@@bs.send] [@@bs.splice];
 };
 
-let module Express = {
+module Express = {
   type expressT;
   external express : unit => expressT = "" [@@bs.module];
   external use : expressT => string => unit = "use" [@@bs.send];
   external static : string => string = "static" [@@bs.module "express"];
   type responseT;
   external sendFile : responseT => string => 'a => unit = "sendFile" [@@bs.send];
-  external get : expressT => string => ('a => responseT => unit [@bs]) => unit = "get" [@@bs.send];
+  external get : expressT => string => ('a => responseT => unit) => unit = "get" [@@bs.send];
 };
 
-let module Http = {
+module Http = {
   type http;
   external create : Express.expressT => http = "Server" [@@bs.module "http"];
   external listen : http => int => (unit => unit) => unit = "" [@@bs.send];
@@ -37,11 +37,13 @@ let app = Express.express ();
 
 let http = Http.create app;
 
-Express.use app (Express.static (Path.join __dirname));
+let __dirname: Js.undefined string = [%bs.node __dirname];
 
-Express.get app "/" (fun req res => Express.sendFile res "index.html" [%bs.obj {root: __dirname}]);
+Express.use app (Express.static (Path.join Path.path __dirname [|"..", "..", ".."|]));
 
-let module InnerServer = Server.Server Common;
+Express.get app "/" (fun req res => Express.sendFile res "index.html" {"root": __dirname});
+
+module InnerServer = Server.Server Common;
 
 let io = InnerServer.createWithHttp http;
 
