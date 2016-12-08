@@ -43,7 +43,7 @@ Express.use app (Express.static (Path.join Path.path __dirname [|"..", "..", "..
 
 Express.get app "/" (fun req res => Express.sendFile res "index.html" {"root": __dirname});
 
-module InnerServer = Server.Server Common;
+module InnerServer = Server.Server Examplecommon;
 
 let io = InnerServer.createWithHttp http;
 
@@ -57,10 +57,11 @@ InnerServer.onConnect
       let pipe typ data => {
         Socket.broadcast socket typ data;
         Socket.emit socket typ data;
-        Socket.emit socket Common.UnusedMessageType data
+        Socket.emit socket Examplecommon.UnusedMessageType data
       };
-      /* Polymorphic pipe which actually knows about Common.t from InnerServer */
-      Socket.on_not_ready_yet socket pipe
+      /* Polymorphic pipe which actually knows about Examplecommon.t from InnerServer */
+      Socket.on socket Examplecommon.Message (pipe Examplecommon.Message);
+      Socket.on socket Examplecommon.MessageOnEnter (pipe Examplecommon.MessageOnEnter)
     }
   );
 

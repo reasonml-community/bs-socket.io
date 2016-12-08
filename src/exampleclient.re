@@ -2,32 +2,38 @@
  * vim: set ft=rust:
  * vim: set ft=reason:
  */
-let module CustomClient = Client.Client Common;
+module CustomClient = Client.Client Examplecommon;
 
 let socket = CustomClient.create ();
 
 let chatarea = Web.Document.getElementById "chatarea";
 
-/* API is great because it forces you to exhaustively match on all possible kinds of messages */
-CustomClient.on_not_ready_yet
+CustomClient.on
   socket
+  Examplecommon.Message
   (
-    fun t x =>
-      switch t {
-      | Common.Message =>
+    fun x =>
+      switch x {
+      | Examplecommon.Data s =>
+        let innerHTML = Web.Element.getInnerHTML chatarea;
+        Web.Element.setInnerHTML
+          chatarea (innerHTML ^ "<div><span style='color:red'>Message</span>: " ^ s ^ "</div>")
+      | Examplecommon.OrOthers => print_endline "OrOthers"
+      }
+  );
+
+CustomClient.on
+  socket
+  Examplecommon.MessageOnEnter
+  (
+    fun x =>
+      switch x {
+      | Examplecommon.Data s =>
         let innerHTML = Web.Element.getInnerHTML chatarea;
         Web.Element.setInnerHTML
           chatarea
-          (innerHTML ^ "<div><span style='color:red'>Message</span>: " ^ Web.toString x ^ "</div>")
-      | Common.MessageOnEnter =>
-        let innerHTML = Web.Element.getInnerHTML chatarea;
-        Web.Element.setInnerHTML
-          chatarea
-          (
-            innerHTML ^
-            "<div><span style='color:red'>MessageOnEnter</span>: " ^ Web.toString x ^ "</div>"
-          )
-      | typ => print_endline @@ "Event '" ^ Common.stringify typ ^ "' not implemented yet."
+          (innerHTML ^ "<div><span style='color:red'>MessageOnEnter</span>: " ^ s ^ "</div>")
+      | Examplecommon.OrOthers => print_endline "OrOthers"
       }
   );
 
@@ -38,14 +44,21 @@ let chatinput = Web.Document.getElementById "chatinput";
 Web.Element.addEventListener
   sendbutton
   "click"
-  (fun _ => CustomClient.emit socket Common.Message (Web.Element.getValue chatinput));
+  (
+    fun _ =>
+      CustomClient.emit
+        socket Examplecommon.Message (Examplecommon.Data (Web.Element.getValue chatinput))
+  );
 
 Web.Document.addEventListener
   "keyup"
   (
     fun e =>
       if (Web.Event.isEnterKey e) {
-        CustomClient.emit socket Common.MessageOnEnter (Web.Element.getValue chatinput);
+        CustomClient.emit
+          socket
+          Examplecommon.MessageOnEnter
+          (Examplecommon.Data (Web.Element.getValue chatinput));
         Web.Element.setValue chatinput ""
       }
   );

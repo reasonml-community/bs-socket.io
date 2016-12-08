@@ -13,8 +13,27 @@ let module Client (M: M_t) => {
   type t;
   external create : unit => t = "io" [@@bs.new];
   external _emit : t => string => 'a => unit = "emit" [@@bs.send];
-  let emit socket t typ => _emit socket (M.stringify t) typ;
+  let emit socket t obj => {
+    let stringType = M.stringify t;
+    let internalSend : t => string => 'a => unit = [%bs.raw {|
+      function(socket, stringType, obj) {
+        socket.emit(stringType, [obj.hasOwnProperty("tag") ? obj.tag : -1, obj]);
+      }
+    |}];
+    internalSend socket stringType obj;
+  };
   external _on : t => string => ('a => unit [@bs]) => unit = "on" [@@bs.send];
   let on_not_ready_yet socket func => List.map (fun t => _on socket (M.stringify t) (func t)) M.all;
-  let on socket t func => _on socket (M.stringify t) func;
+  let on socket t func => {
+    let assumeObjWithFirstElemTag : 'a => 'b = [%bs.raw {|
+      function(obj) {
+        var ret = obj[1];
+        if (obj[0] != -1) {
+          ret.tag = obj[0];
+        }
+        return ret;
+      }
+    |}];
+    _on socket (M.stringify t) (fun obj => func (assumeObjWithFirstElemTag obj));
+  };
 };

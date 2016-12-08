@@ -15,3 +15,7 @@ let stringify t =>
   };
 
 let all = [Message, MessageOnEnter, UnusedMessageType];
+
+type dataT =
+  | Data string
+  | OrOthers ;
