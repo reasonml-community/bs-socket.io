@@ -139,7 +139,7 @@ module Server (M: M_t) => {
     /* external _unsafeEmit : broadcastT => string => 'a => unit = "emit" [@@bs.send]; */
     let broadcast socket str data =>
       _unsafeEmit BroadcastKind (_unsafeBroadcast socket) (M.stringify str) data;
-    external id : socketT => string = "id" [@@bs.send];
+    external id : socketT => string = "id" [@@bs.get];
     external join : socketT => string => ('a => unit [@bs]) => socketT = "join" [@@bs.send];
     external leave : socketT => string => ('a => unit [@bs]) => socketT = "leave" [@@bs.send];
     external selectRoom : socketT => string => socketT = "to" [@@bs.send];
