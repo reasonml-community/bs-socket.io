@@ -27,11 +27,14 @@ let module Client (M: M_t) => {
   let on socket t func => {
     let assumeObjWithFirstElemTag : 'a => 'b = [%bs.raw {|
       function(obj) {
-        var ret = obj[1];
-        if (obj[0] != -1) {
-          ret.tag = obj[0];
+        if (Object.prototype.toString.call(obj) === "[object Array]") {
+          var ret = obj[1];
+          if (obj[0] != -1) {
+            ret.tag = obj[0];
+          }
+          return ret;
         }
-        return ret;
+        return obj;
       }
     |}];
     _on socket (M.stringify t) (fun obj => func (assumeObjWithFirstElemTag obj));
