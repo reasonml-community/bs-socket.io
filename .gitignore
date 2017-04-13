@@ -1,5 +1,7 @@
 _build
+lib
 node_modules
 .jenga
+.merlin
 
 *.js

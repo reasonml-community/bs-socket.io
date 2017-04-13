@@ -114,7 +114,7 @@ module Server (M: M_t) => {
    */
   module Socket = {
     /* Here 'a means that you can send anything you want, and it'll depend on Bucklescript */
-    external _on : socketT => string => ('a => unit [@bs]) => unit = "on" [@@bs.send];
+    external _on : socketT => string => ('a => unit) => unit = "on" [@@bs.send];
     let on_not_ready_yet socket func =>
       List.iter (fun t => _on socket (M.stringify t) (func t)) M.all;
     let on socket t func => {
@@ -143,12 +143,12 @@ module Server (M: M_t) => {
     let broadcast socket str data =>
       _unsafeEmit BroadcastKind (_unsafeBroadcast socket) (M.stringify str) data;
     external id : socketT => string = "id" [@@bs.get];
-    external join : socketT => string => ('a => unit [@bs]) => socketT = "join" [@@bs.send];
-    external leave : socketT => string => ('a => unit [@bs]) => socketT = "leave" [@@bs.send];
+    external join : socketT => string => ('a => unit) => socketT = "join" [@@bs.send];
+    external leave : socketT => string => ('a => unit) => socketT = "leave" [@@bs.send];
     external selectRoom : socketT => string => socketT = "to" [@@bs.send];
     external compress : socketT => bool => socketT = "compress" [@@bs.send];
     external disconnect : socketT => bool => socketT = "disconnect" [@@bs.send];
   };
-  external _unsafeOnConnect : serverT => string => (socketT => unit [@bs]) => unit = "on" [@@bs.send];
+  external _unsafeOnConnect : serverT => string => (socketT => unit) => unit = "on" [@@bs.send];
   let onConnect io cb => _unsafeOnConnect io "connection" cb;
 };

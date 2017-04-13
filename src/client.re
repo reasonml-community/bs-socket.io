@@ -22,7 +22,7 @@ let module Client (M: M_t) => {
     |}];
     internalSend socket stringType obj;
   };
-  external _on : t => string => ('a => unit [@bs]) => unit = "on" [@@bs.send];
+  external _on : t => string => ('a => unit) => unit = "on" [@@bs.send];
   let on_not_ready_yet socket func => List.map (fun t => _on socket (M.stringify t) (func t)) M.all;
   let on socket t func => {
     let assumeObjWithFirstElemTag : 'a => 'b = [%bs.raw {|
