@@ -4,5 +4,5 @@
     { "dir": "src" },
     { "dir": "example", "type": "dev" }
   ],
-  "bs-dependencies": ["reason-js"]
+  // "bs-dependencies": ["reason-js"]
 }
