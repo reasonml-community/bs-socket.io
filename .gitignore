@@ -4,4 +4,4 @@ node_modules
 .jenga
 .merlin
 
-*.js
+lib
