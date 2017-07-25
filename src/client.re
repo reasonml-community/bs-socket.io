@@ -15,17 +15,17 @@ let module Client (M: M_t) => {
   external _emit : t => string => 'a => unit = "emit" [@@bs.send];
   let emit socket t obj => {
     let stringType = M.stringify t;
-    let internalSend : t => string => 'a => unit = [%bs.raw {|
+    /*let internalSend : t => string => 'a => unit = [%bs.raw {|
       function(socket, stringType, obj) {
         socket.emit(stringType, [obj.hasOwnProperty("tag") ? obj.tag : -1, obj]);
       }
-    |}];
-    internalSend socket stringType obj;
+    |}];*/
+    _emit socket stringType (Json.toJson obj);
   };
   external _on : t => string => ('a => unit) => unit = "on" [@@bs.send];
   let on_not_ready_yet socket func => List.map (fun t => _on socket (M.stringify t) (func t)) M.all;
   let on socket t func => {
-    let assumeObjWithFirstElemTag : 'a => 'b = [%bs.raw {|
+    /*let assumeObjWithFirstElemTag : 'a => 'b = [%bs.raw {|
       function(obj) {
         if (Object.prototype.toString.call(obj) === "[object Array]") {
           var ret = obj[1];
@@ -36,7 +36,7 @@ let module Client (M: M_t) => {
         }
         return obj;
       }
-    |}];
-    _on socket (M.stringify t) (fun obj => func (assumeObjWithFirstElemTag obj));
+    |}];*/
+    _on socket (M.stringify t) (fun obj => func (Json.fromJson obj));
   };
 };

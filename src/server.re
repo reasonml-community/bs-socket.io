@@ -2,6 +2,7 @@
  * vim: set ft=rust:
  * vim: set ft=reason:
  */
+
 /* Same as Server's.
  * `all` is basically a hack which relies on the user listing out all the possible event types that are
  * in use. We internally map over them and hook up event handlers for each one. This allows ocaml's
@@ -50,6 +51,7 @@ module Server (M: M_t) => {
    * http://bloomberg.github.io/bucklescript/Manual.html#_phantom_arguments_and_ad_hoc_polyrmophism
    * See _unsafeEmitT for explanation.
    */
+
   type kind _ =
     | Func :kind ('a => bool => unit)
     | String :kind string;
@@ -95,19 +97,23 @@ module Server (M: M_t) => {
      * This is an annoying problem...
      */
     | BroadcastKind :_unsafeEmitT 'a;
+  
+  external _emit : 'a => (_unsafeEmitT 'a) [@bs.ignore] => string => 'b => unit = "emit" [@@bs.send];
+
   /* We swallow the first argument because we actually don't care. */
-  let _unsafeEmit: type a. _unsafeEmitT a => a => string => 'b => unit =
-    fun a => [%bs.raw
+  /*let _unsafeEmit: type a. (_unsafeEmitT a [@bs.ignore]) => a => string => 'b => unit = fun server stringType obj =>
+    _emit server stringType (Json.toJson obj);*/
+    /*fun a => [%bs.raw
       {|
       function(server, stringType, obj) {
         server.emit(stringType, [obj.hasOwnProperty("tag") ? obj.tag : -1, obj]);
       }
     |}
-    ];
-  external _emit : serverT => string => 'a => unit = "emit" [@@bs.send];
+    ];*/
+  /*external _emit : serverT => string => 'a => unit = "emit" [@@bs.send];*/
   let emit (server: serverT) (t: M.t) (obj: 'a) :unit => {
     let stringType = M.stringify t;
-    _unsafeEmit ServerKind server stringType obj
+    _emit server ServerKind stringType (Json.toJson obj)
   };
   /* socketT is the representation of a connection received by the server. It's a pipeline through
    * which one can emit and listen to events.
@@ -118,7 +124,7 @@ module Server (M: M_t) => {
     let on_not_ready_yet socket func =>
       List.iter (fun t => _on socket (M.stringify t) (func t)) M.all;
     let on socket t func => {
-      let assumeObjWithFirstElemTag: 'a => 'b = [%bs.raw
+      /*let assumeObjWithFirstElemTag: 'a => 'b = [%bs.raw
         {|
         function(obj) {
           if (Object.prototype.toString.call(obj) === "[object Array]") {
@@ -131,17 +137,17 @@ module Server (M: M_t) => {
           return obj;
         }
       |}
-      ];
-      _on socket (M.stringify t) (fun obj => func (assumeObjWithFirstElemTag obj))
+      ];*/
+      _on socket (M.stringify t) (fun obj => func (Json.fromJson obj))
     };
     /* external _emit : socketT => string => 'a => unit = "emit" [@@bs.send]; */
     let emit (socket: socketT) (t: M.t) (obj: 'a) =>
-      _unsafeEmit SocketKind socket (M.stringify t) obj;
+      _emit socket SocketKind (M.stringify t) (Json.toJson obj);
     type broadcastT;
     external _unsafeBroadcast : socketT => broadcastT = "broadcast" [@@bs.get];
     /* external _unsafeEmit : broadcastT => string => 'a => unit = "emit" [@@bs.send]; */
     let broadcast socket str data =>
-      _unsafeEmit BroadcastKind (_unsafeBroadcast socket) (M.stringify str) data;
+      _emit (_unsafeBroadcast socket) BroadcastKind (M.stringify str) (Json.toJson data);
     external id : socketT => string = "id" [@@bs.get];
     external join : socketT => string => ('a => unit) => socketT = "join" [@@bs.send];
     external leave : socketT => string => ('a => unit) => socketT = "leave" [@@bs.send];
