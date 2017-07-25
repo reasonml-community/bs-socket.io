@@ -1,12 +1,51 @@
-/*
- * vim: set ft=rust:
- * vim: set ft=reason:
- */
+/**
+ * All credit goes to Cheng Lou. It was just too hard to figure out jengaboot + bucklescript for now.
+ * Copy pasted from https://github.com/chenglou/reason-js
+ **/
+external toString : Js.t 'a => string = "toString" [@@bs.send];
+
+let module Event = {
+  type eventT;
+  let isEnterKey: eventT => bool = [%bs.raw
+    {|
+    function (e) {
+      return e.which === 13;
+    }
+  |}
+  ];
+};
+
+/* Created a bunch of modules to keep things clean. This is just for demo purposes. */
+let module Element = {
+  type elementT;
+  external setInnerHTML : elementT => string => unit = "innerHTML" [@@bs.set];
+  external getInnerHTML : elementT => string = "innerHTML" [@@bs.get];
+  external setValue : elementT => string => unit = "value" [@@bs.set];
+  external getValue : elementT => string = "value" [@@bs.get];
+  external addEventListener : elementT => string => (Event.eventT => unit) => unit = "addEventListener" [@@bs.send];
+};
+
+let module Document = {
+  external getElementById : string => Element.elementT = "document.getElementById" [@@bs.val];
+  external addEventListener : string => (Event.eventT => unit) => unit = "document.addEventListener" [@@bs.val];
+};
+
+let module Window = {
+  type intervalIdT;
+  external setInterval : (unit => unit) => int => intervalIdT = "window.setInterval" [@@bs.val];
+  external clearInterval : intervalIdT => unit = "window.clearInterval" [@@bs.val];
+};
+
+let module Console = {
+  external log : 'anything => unit = "console.log" [@@bs.val];
+};
+
+
 module CustomClient = Client.Client Examplecommon;
 
 let socket = CustomClient.create ();
 
-let chatarea = Web.Document.getElementById "chatarea";
+let chatarea = Document.getElementById "chatarea";
 
 CustomClient.on
   socket
@@ -15,8 +54,8 @@ CustomClient.on
     fun x =>
       switch x {
       | Examplecommon.Data s =>
-        let innerHTML = Web.Element.getInnerHTML chatarea;
-        Web.Element.setInnerHTML
+        let innerHTML = Element.getInnerHTML chatarea;
+        Element.setInnerHTML
           chatarea (innerHTML ^ "<div><span style='color:red'>Message</span>: " ^ s ^ "</div>")
       | Examplecommon.OrOthers => print_endline "OrOthers"
       }
@@ -26,39 +65,35 @@ CustomClient.on
   socket
   Examplecommon.MessageOnEnter
   (
-    fun x =>
-      switch x {
-      | Examplecommon.Data s =>
-        let innerHTML = Web.Element.getInnerHTML chatarea;
-        Web.Element.setInnerHTML
-          chatarea
-          (innerHTML ^ "<div><span style='color:red'>MessageOnEnter</span>: " ^ s ^ "</div>")
-      | Examplecommon.OrOthers => print_endline "OrOthers"
-      }
-  );
+    fun s => {
+      let innerHTML = Element.getInnerHTML chatarea;
+      Element.setInnerHTML
+        chatarea
+        (innerHTML ^ "<div><span style='color:red'>MessageOnEnter</span>: " ^ s ^ "</div>")
+  });
 
-let sendbutton = Web.Document.getElementById "sendbutton";
+let sendbutton = Document.getElementById "sendbutton";
 
-let chatinput = Web.Document.getElementById "chatinput";
+let chatinput = Document.getElementById "chatinput";
 
-Web.Element.addEventListener
+Element.addEventListener
   sendbutton
   "click"
   (
     fun _ =>
       CustomClient.emit
-        socket Examplecommon.Message (Examplecommon.Data (Web.Element.getValue chatinput))
+        socket Examplecommon.Message (Examplecommon.Data (Element.getValue chatinput))
   );
 
-Web.Document.addEventListener
+Document.addEventListener
   "keyup"
   (
     fun e =>
-      if (Web.Event.isEnterKey e) {
+      if (Event.isEnterKey e) {
         CustomClient.emit
           socket
           Examplecommon.MessageOnEnter
-          (Examplecommon.Data (Web.Element.getValue chatinput));
-        Web.Element.setValue chatinput ""
+          (Element.getValue chatinput);
+        Element.setValue chatinput ""
       }
   );
