@@ -4,5 +4,5 @@
     { "dir": "src" },
     { "dir": "example", "type": "dev" }
   ],
-  "bsc-flags": ["-no-alias-deps", "-w", "-20-40+6+7+27+32..39+44+45"]
+  "bsc-flags": ["-w", "-20"]
 }
