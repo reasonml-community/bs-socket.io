@@ -1,19 +1,16 @@
 {
   "name": "ReSocketIO",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "socket.io in Reason",
   "scripts": {
     "build": "bsb",
-    "build-deps": "bsb -make-world",
-    "run": "node lib/js/example/exampleserver.js",
-    "pack": "./node_modules/webpack/bin/webpack.js lib/js/example/exampleclient.js --output-filename lib/app.js"
+    "run": "node lib/js/example/exampleserver.js"
   },
   "dependencies": {
     "socket.io": "^1.4.8"
   },
   "devDependencies": {
     "express": "^4.14.0",
-    "webpack": "^1.13.2",
     "bs-platform": "*"
   },
   "author": "Benjamin San Souci <benjamin.sansouci@gmail.com>"

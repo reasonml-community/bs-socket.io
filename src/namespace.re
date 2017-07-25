@@ -10,7 +10,7 @@ module Namespace (M: Common.M_t) => {
     "use" [@@bs.send];
   external default : Server.serverT => t = "sockets" [@@bs.send];
   /* This is "of" in socket.io. */
-  external from : Server.serverT => string => t = "of" [@@bs.send];
+  external of_ : Server.serverT => string => t = "of" [@@bs.send];
   /* This is "to" in socket.io or the "in" (they're synonyms apparently) */
   external to_ : t => string => t = "to" [@@bs.send];
   external _emit : t => string => 'a => unit = "emit" [@@bs.send];
