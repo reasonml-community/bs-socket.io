@@ -6,6 +6,5 @@ module Client (M: Common.M_t) => {
     _emit socket (M.stringify message) (Json.toValidJson obj);
   external _on : t => string => ('a => unit) => unit = "on" [@@bs.send];
   let on socket (message: M.t 'a) (func: 'a => unit) =>
-    _on
-      socket (M.stringify message) (fun obj => func (Json.fromValidJson obj));
+    _on socket (M.stringify message) (fun obj => func (Json.fromValidJson obj));
 };

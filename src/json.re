@@ -1,6 +1,6 @@
-/* @Performance 
+/* @Performance
    Special serialization logic because we cannot serialize variants using Json.stringify.
-   The reason for that is that Variants are represented as arrays under the hood with a property .tag 
+   The reason for that is that Variants are represented as arrays under the hood with a property .tag
    representing the tag kind. That property isn't one that's normally on array so Json.stringify won't serialize it.
    We have to resort to using our own encoding.
          Ben - July 24 2017
