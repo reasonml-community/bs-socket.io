@@ -1,9 +1,8 @@
-ReSocket.io
+bs-socket.io
 ---
+Simple bindings to [socket.io](https://socket.io/).
 
-This is a dead simple wrapper for socket.io. It supports most of the API (don't hesitate to open issues to get more if needed).
-
-To build everything run `npm run all` and to run the demo run `npm run run` and go to `localhost:3000` on two tabs. You can send messages back and forth!
+To build everything run `npm run build` and to run the demo run `npm run run` and go to `localhost:3000` on two tabs. You can send messages back and forth!
 
 # Couple Gotchas
 There are a couple differences between the JS API and this one.
