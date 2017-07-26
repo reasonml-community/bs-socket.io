@@ -1,5 +1,5 @@
 {
-  "name": "ReSocketIO",
+  "name": "bs-socket.io",
   "version": "0.1.0",
   "description": "socket.io in Reason",
   "scripts": {
