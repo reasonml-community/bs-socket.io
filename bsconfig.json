@@ -1,8 +1,13 @@
 {
   "name": "bs-socket.io",
+  "bsc-flags": ["-w", "-20", "-bs-super-errors"],
   "sources": [
-    { "dir": "src" },
-    { "dir": "example", "type": "dev" }
+    {
+      "dir": "src"
+    },
+    {
+      "dir": "example",
+      "type": "dev"
+    }
   ],
-  "bsc-flags": ["-w", "-20"]
 }

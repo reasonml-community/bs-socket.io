@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "description": "socket.io in Reason",
   "scripts": {
-    "build": "bsb",
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "test": "exit 0",
     "run": "node lib/js/example/exampleserver.js"
   },
   "dependencies": {
@@ -11,7 +14,7 @@
   },
   "devDependencies": {
     "express": "^4.14.0",
-    "bs-platform": "^1.8.2"
+    "bs-platform": "^1.9.0"
   },
   "author": "Benjamin San Souci <benjamin.sansouci@gmail.com>"
 }
