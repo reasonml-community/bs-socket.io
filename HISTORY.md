@@ -8,6 +8,7 @@ Breaking change!
 - Uppercase files now, as per community comvention. If things go wrong after the upgrade, please clean your artifacts and try again. Sorry!
 - `Client.Client`/`Namespace.Namespace`/`Server.Server` functors all got renamed to `Make`.
 - Activated namespace. It's now called `BsSocket`.
+- **The package name is now called `bs-socket`**.
 
 # 0.1.0
 
