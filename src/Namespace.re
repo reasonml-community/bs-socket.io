@@ -1,4 +1,4 @@
-module Namespace = (M: Common.M_t) => {
+module Make = (M: Common.M_t) => {
   type t;
 
   /*** Getters */

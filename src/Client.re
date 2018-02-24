@@ -1,4 +1,4 @@
-module Client = (M: Common.M_t) => {
+module Make = (M: Common.M_t) => {
   type t;
   [@bs.new] external create : unit => t = "io";
   [@bs.send] external _emit : (t, string, 'a) => unit = "emit";

@@ -2,7 +2,7 @@ type serverT;
 
 type socketT;
 
-module Server = (M: Common.M_t) => {
+module Make = (M: Common.M_t) => {
   [@bs.module] external create : unit => serverT = "socket.io";
   [@bs.module] external createWithHttp : 'a => serverT = "socket.io";
 

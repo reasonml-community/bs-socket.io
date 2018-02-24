@@ -2,7 +2,7 @@
 
      Example:
 
-      module InnerServer = Server.Server({
+      module InnerServer = Server.Make({
         type t('a) = string;
         let stringify(t) => t;
       });

@@ -43,7 +43,7 @@ module Console = {
   [@bs.val] external log : 'anything => unit = "console.log";
 };
 
-module CustomClient = Client.Client(ExampleCommon);
+module CustomClient = Client.Make(ExampleCommon);
 
 let socket = CustomClient.create();
 

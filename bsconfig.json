@@ -1,5 +1,5 @@
 {
-  "name": "bs-socket.io",
+  "name": "bs-socket",
   "namespace": true,
   "bsc-flags": ["-w", "-20"],
   "package-specs": {

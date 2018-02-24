@@ -31,7 +31,7 @@ Express.use(app, Express.static(Path.join([|__dirname, "..", "..", ".."|])));
 
 Express.get(app, "/", (_, res) => Express.sendFile(res, "index.html", {"root": __dirname}));
 
-module InnerServer = Server.Server(ExampleCommon);
+module InnerServer = Server.Make(ExampleCommon);
 
 let io = InnerServer.createWithHttp(http);
 
