@@ -1,8 +1,8 @@
-/**
+/***
  * All credit goes to Cheng Lou. It was just too hard to figure out jengaboot + bucklescript for now.
  * Copy pasted from https://github.com/chenglou/reason-js
  **/
-external toString : Js.t 'a => string = "toString" [@@bs.send];
+[@bs.send] external toString : Js.t('a) => string = "toString";
 
 module Event = {
   type eventT;
@@ -18,95 +18,84 @@ module Event = {
 /* Created a bunch of modules to keep things clean. This is just for demo purposes. */
 module Element = {
   type elementT;
-  external setInnerHTML : elementT => string => unit = "innerHTML" [@@bs.set];
-  external getInnerHTML : elementT => string = "innerHTML" [@@bs.get];
-  external setValue : elementT => string => unit = "value" [@@bs.set];
-  external getValue : elementT => string = "value" [@@bs.get];
-  external addEventListener :
-    elementT => string => (Event.eventT => unit) => unit =
-    "addEventListener" [@@bs.send];
+  [@bs.set] external setInnerHTML : (elementT, string) => unit = "innerHTML";
+  [@bs.get] external getInnerHTML : elementT => string = "innerHTML";
+  [@bs.set] external setValue : (elementT, string) => unit = "value";
+  [@bs.get] external getValue : elementT => string = "value";
+  [@bs.send]
+  external addEventListener : (elementT, string, Event.eventT => unit) => unit =
+    "addEventListener";
 };
 
 module Document = {
-  external getElementById : string => Element.elementT =
-    "document.getElementById" [@@bs.val];
-  external addEventListener : string => (Event.eventT => unit) => unit =
-    "document.addEventListener" [@@bs.val];
+  [@bs.val] external getElementById : string => Element.elementT = "document.getElementById";
+  [@bs.val]
+  external addEventListener : (string, Event.eventT => unit) => unit = "document.addEventListener";
 };
 
 module Window = {
   type intervalIdT;
-  external setInterval : (unit => unit) => int => intervalIdT =
-    "window.setInterval" [@@bs.val];
-  external clearInterval : intervalIdT => unit =
-    "window.clearInterval" [@@bs.val];
+  [@bs.val] external setInterval : (unit => unit, int) => intervalIdT = "window.setInterval";
+  [@bs.val] external clearInterval : intervalIdT => unit = "window.clearInterval";
 };
 
 module Console = {
-  external log : 'anything => unit = "console.log" [@@bs.val];
+  [@bs.val] external log : 'anything => unit = "console.log";
 };
 
-module CustomClient = Client.Client Examplecommon;
+module CustomClient = Client.Client(Examplecommon);
 
-let socket = CustomClient.create ();
+let socket = CustomClient.create();
 
-let chatarea = Document.getElementById "chatarea";
+let chatarea = Document.getElementById("chatarea");
 
-CustomClient.on
-  socket
-  Examplecommon.Message
-  (
-    fun x =>
-      switch x {
-      | Examplecommon.Data s =>
-        let innerHTML = Element.getInnerHTML chatarea;
-        Element.setInnerHTML
-          chatarea
-          (
-            innerHTML ^
-            "<div><span style='color:red'>Message</span>: " ^ s ^ "</div>"
-          )
-      | Examplecommon.OrOthers => print_endline "OrOthers"
-      }
-  );
-
-CustomClient.on
-  socket
-  Examplecommon.MessageOnEnter
-  (
-    fun s => {
-      let innerHTML = Element.getInnerHTML chatarea;
-      Element.setInnerHTML
-        chatarea
-        (
-          innerHTML ^
-          "<div><span style='color:red'>MessageOnEnter</span>: " ^ s ^ "</div>"
-        )
+CustomClient.on(
+  socket,
+  Examplecommon.Message,
+  (x) =>
+    switch x {
+    | Examplecommon.Data(s) =>
+      let innerHTML = Element.getInnerHTML(chatarea);
+      Element.setInnerHTML(
+        chatarea,
+        innerHTML ++ "<div><span style='color:red'>Message</span>: " ++ s ++ "</div>"
+      )
+    | Examplecommon.OrOthers => print_endline("OrOthers")
     }
-  );
+);
 
-let sendbutton = Document.getElementById "sendbutton";
+CustomClient.on(
+  socket,
+  Examplecommon.MessageOnEnter,
+  (s) => {
+    let innerHTML = Element.getInnerHTML(chatarea);
+    Element.setInnerHTML(
+      chatarea,
+      innerHTML ++ "<div><span style='color:red'>MessageOnEnter</span>: " ++ s ++ "</div>"
+    )
+  }
+);
 
-let chatinput = Document.getElementById "chatinput";
+let sendbutton = Document.getElementById("sendbutton");
 
-Element.addEventListener
-  sendbutton
-  "click"
-  (
-    fun _ =>
-      CustomClient.emit
-        socket
-        Examplecommon.Message
-        (Examplecommon.Data (Element.getValue chatinput))
-  );
+let chatinput = Document.getElementById("chatinput");
 
-Document.addEventListener
-  "keyup"
-  (
-    fun e =>
-      if (Event.isEnterKey e) {
-        CustomClient.emit
-          socket Examplecommon.MessageOnEnter (Element.getValue chatinput);
-        Element.setValue chatinput ""
-      }
-  );
+Element.addEventListener(
+  sendbutton,
+  "click",
+  (_) =>
+    CustomClient.emit(
+      socket,
+      Examplecommon.Message,
+      Examplecommon.Data(Element.getValue(chatinput))
+    )
+);
+
+Document.addEventListener(
+  "keyup",
+  (e) =>
+    if (Event.isEnterKey(e)) {
+      CustomClient.emit(socket, Examplecommon.MessageOnEnter, Element.getValue(chatinput));
+      Element.setValue(chatinput, "")
+    }
+);

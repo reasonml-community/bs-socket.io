@@ -1,16 +1,16 @@
 type dataT =
-  | Data string
+  | Data(string)
   | OrOthers;
 
 type data2T = string;
 
-type t 'a =
-  | Message :t dataT
-  | MessageOnEnter :t data2T
-  | UnusedMessageType :t 'a;
+type t('a) =
+  | Message: t(dataT)
+  | MessageOnEnter: t(data2T)
+  | UnusedMessageType: t('a);
 
 
-/**
+/***
  * This is not great. I'd like to not force the user to have to know about
  * locally abstract data types.
  * The reaosn this is needed is because we're calling stringify on different t
@@ -33,7 +33,7 @@ type t 'a =
  * call, Message had type `t dataT` and data2T != dataT.
  * This (type a) is basically allowing those two calls to coexist.
  */
-let stringify (type a) (t: t a) =>
+let stringify = (type a, t: t(a)) =>
   switch t {
   | Message => "Message"
   | MessageOnEnter => "MessageOnEnter"
