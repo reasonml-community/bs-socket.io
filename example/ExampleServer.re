@@ -31,7 +31,7 @@ Express.use(app, Express.static(Path.join([|__dirname, "..", "..", ".."|])));
 
 Express.get(app, "/", (_, res) => Express.sendFile(res, "index.html", {"root": __dirname}));
 
-module InnerServer = Server.Server(Examplecommon);
+module InnerServer = Server.Server(ExampleCommon);
 
 let io = InnerServer.createWithHttp(http);
 
@@ -44,11 +44,11 @@ InnerServer.onConnect(
     let pipe = (typ, data) => {
       Socket.broadcast(socket, typ, data);
       Socket.emit(socket, typ, data);
-      Socket.emit(socket, Examplecommon.UnusedMessageType, data)
+      Socket.emit(socket, ExampleCommon.UnusedMessageType, data)
     };
-    /* Polymorphic pipe which actually knows about Examplecommon.t from InnerServer */
-    Socket.on(socket, Examplecommon.Message, pipe(Examplecommon.Message));
-    Socket.on(socket, Examplecommon.MessageOnEnter, pipe(Examplecommon.MessageOnEnter))
+    /* Polymorphic pipe which actually knows about ExampleCommon.t from InnerServer */
+    Socket.on(socket, ExampleCommon.Message, pipe(ExampleCommon.Message));
+    Socket.on(socket, ExampleCommon.MessageOnEnter, pipe(ExampleCommon.MessageOnEnter))
   }
 );
 

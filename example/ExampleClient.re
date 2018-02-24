@@ -43,7 +43,7 @@ module Console = {
   [@bs.val] external log : 'anything => unit = "console.log";
 };
 
-module CustomClient = Client.Client(Examplecommon);
+module CustomClient = Client.Client(ExampleCommon);
 
 let socket = CustomClient.create();
 
@@ -51,22 +51,22 @@ let chatarea = Document.getElementById("chatarea");
 
 CustomClient.on(
   socket,
-  Examplecommon.Message,
+  ExampleCommon.Message,
   (x) =>
     switch x {
-    | Examplecommon.Data(s) =>
+    | ExampleCommon.Data(s) =>
       let innerHTML = Element.getInnerHTML(chatarea);
       Element.setInnerHTML(
         chatarea,
         innerHTML ++ "<div><span style='color:red'>Message</span>: " ++ s ++ "</div>"
       )
-    | Examplecommon.OrOthers => print_endline("OrOthers")
+    | ExampleCommon.OrOthers => print_endline("OrOthers")
     }
 );
 
 CustomClient.on(
   socket,
-  Examplecommon.MessageOnEnter,
+  ExampleCommon.MessageOnEnter,
   (s) => {
     let innerHTML = Element.getInnerHTML(chatarea);
     Element.setInnerHTML(
@@ -86,8 +86,8 @@ Element.addEventListener(
   (_) =>
     CustomClient.emit(
       socket,
-      Examplecommon.Message,
-      Examplecommon.Data(Element.getValue(chatinput))
+      ExampleCommon.Message,
+      ExampleCommon.Data(Element.getValue(chatinput))
     )
 );
 
@@ -95,7 +95,7 @@ Document.addEventListener(
   "keyup",
   (e) =>
     if (Event.isEnterKey(e)) {
-      CustomClient.emit(socket, Examplecommon.MessageOnEnter, Element.getValue(chatinput));
+      CustomClient.emit(socket, ExampleCommon.MessageOnEnter, Element.getValue(chatinput));
       Element.setValue(chatinput, "")
     }
 );

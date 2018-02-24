@@ -2,6 +2,11 @@
   "name": "bs-socket.io",
   "namespace": true,
   "bsc-flags": ["-w", "-20"],
+  "package-specs": {
+    "module": "commonjs",
+    "in-source": true
+  },
+  "suffix": ".bs.js",
   "sources": [
     {
       "dir": "src"
