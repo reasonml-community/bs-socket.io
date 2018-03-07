@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "express": "^4.14.0",
-    "bs-platform": "^2.2.0"
+    "bs-platform": "^2.2.2"
   },
   "author": "Benjamin San Souci <benjamin.sansouci@gmail.com>"
 }
