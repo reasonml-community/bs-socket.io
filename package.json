@@ -1,6 +1,6 @@
 {
   "name": "bs-socket",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "socket.io in Reason",
   "scripts": {
     "build": "bsb -make-world",
@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "express": "^4.14.0",
-    "bs-platform": "^2.2.2"
+    "bs-platform": "^3.0.0"
   },
   "author": "Benjamin San Souci <benjamin.sansouci@gmail.com>"
 }

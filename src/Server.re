@@ -20,7 +20,7 @@ module Make = (M: Common.M_t) => {
       ~pingInterval: int=?,
       ~maxHttpBufferSize: int=?,
       ~transports: list(string)=?,
-      ~allowUpgrades: Js.boolean=?,
+      ~allowUpgrades: bool=?,
       ~perMessageDeflate: int=?,
       ~httpCompression: int=?,
       ~cookie: string=?,
@@ -35,7 +35,7 @@ module Make = (M: Common.M_t) => {
   [@bs.module] external createWithPort : (int, createOptionsT) => serverT = "socket.io";
 
   /*** */
-  [@bs.send] external serveClient : (serverT, Js.boolean) => serverT = "serveClient";
+  [@bs.send] external serveClient : (serverT, bool) => serverT = "serveClient";
 
   /*** */
   [@bs.send] external path : (serverT, string) => serverT = "path";
@@ -93,8 +93,8 @@ module Make = (M: Common.M_t) => {
     [@bs.send] external join : (socketT, string, 'a => unit) => socketT = "join";
     [@bs.send] external leave : (socketT, string, 'a => unit) => socketT = "leave";
     [@bs.send] external to_ : (socketT, string) => socketT = "to";
-    [@bs.send] external compress : (socketT, Js.boolean) => socketT = "compress";
-    [@bs.send] external disconnect : (socketT, Js.boolean) => socketT = "disconnect";
+    [@bs.send] external compress : (socketT, bool) => socketT = "compress";
+    [@bs.send] external disconnect : (socketT, bool) => socketT = "disconnect";
     [@bs.send] external use : (socketT, ('a, unit => unit) => unit) => unit = "use";
 
     /*** */

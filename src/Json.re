@@ -5,9 +5,9 @@
      We have to resort to using our own encoding.
            Ben - July 24 2017
    */
-let toValidJson = [%bs.raw
+let toValidJson = [%raw
+  (o) =>
   {|
-function toJson(o) {
   switch (typeof o){
     case "boolean":
     case "number":
@@ -21,13 +21,12 @@ function toJson(o) {
       }
       throw new Error("Cannot serialize unidentified object [" + o + "].")
   }
-}
 |}
 ];
 
-let fromValidJson = [%bs.raw
+let fromValidJson = [%raw
+  (o) =>
   {|
-function fromJson(o) {
   switch (typeof o){
     case "boolean":
     case "number":
@@ -48,6 +47,5 @@ function fromJson(o) {
       }
       throw new Error("Cannot deserialize unidentified object [" + o + "].")
   }
-}
 |}
 ];
