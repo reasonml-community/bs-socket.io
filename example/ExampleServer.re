@@ -27,7 +27,7 @@ let http = Http.create(app);
 
 [@bs.val] external __dirname : string = "";
 
-Express.use(app, Express.static(Path.join([|__dirname, "..", "..", ".."|])));
+Express.use(app, Express.static(Path.join([|__dirname, ".."|])));
 
 Express.get(app, "/", (_, res) => Express.sendFile(res, "index.html", {"root": __dirname}));
 
