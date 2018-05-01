@@ -17,7 +17,7 @@ let toValidJson = [%raw
       throw new Error("Cannot serialize functions");
     case "object":
       if (Array.isArray(o)){
-        return [o.hasOwnProperty("tag") ? o.tag : -1, o.map(toJson)];
+        return [o.hasOwnProperty("tag") ? o.tag : -1, o.map(toValidJson)];
       }
       throw new Error("Cannot serialize unidentified object [" + o + "].")
   }
@@ -38,9 +38,9 @@ let fromValidJson = [%raw
       if (Array.isArray(o)){
         var first = o[0]
         if (first == -1){
-          return o[1].map(fromJson);
+          return o[1].map(fromValidJson);
         } else {
-          var a = o[1].map(fromJson);
+          var a = o[1].map(fromValidJson);
           a.tag = first;
           return a
         }
