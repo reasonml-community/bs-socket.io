@@ -69,10 +69,8 @@ module Make = (M: Common.M_t) => {
   external attachWithPort : (serverT, int, createOptionsT) => serverT =
     "attach";
 
-  /*** Emit is reused below. That's why it has those abstract types. */
+  /*** */
   [@bs.send] external _emit : ('a, string, 'b) => unit = "emit";
-  let emit = (server: serverT, obj: M.t) : unit =>
-    _emit(server, "message", Json.toValidJson(obj));
 
   /***
    * socketT is the representation of a connection received by the server.
