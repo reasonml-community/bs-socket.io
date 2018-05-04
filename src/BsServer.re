@@ -122,9 +122,12 @@ module Make = (M: Common.M_t) => {
     external _volatileEmit : (volatileT, string, 'a) => unit = "emit";
     let volatileEmit = (server: socketT, obj: M.t) : unit =>
       _volatileEmit(getVolatile(server), "message", Json.toValidJson(obj));
+
+    let onDisconnect = (socket, cb) => _on(socket, "disconnect", _ => cb());
   };
   [@bs.send]
   external _unsafeOnConnect : (serverT, string, socketT => unit) => unit =
     "on";
   let onConnect = (io, cb) => _unsafeOnConnect(io, "connection", cb);
+
 };
