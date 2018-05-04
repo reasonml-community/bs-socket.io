@@ -1,7 +1,8 @@
 /* Created a bunch of modules to keep things clean. This is just for demo purposes. */
 module Path = {
   type pathT;
-  [@bs.module "path"] [@bs.splice] external join : array(string) => string = "";
+  [@bs.module "path"] [@bs.splice]
+  external join : array(string) => string = "";
 };
 
 module Express = {
@@ -11,7 +12,8 @@ module Express = {
   [@bs.module "express"] external static : string => string = "static";
   type responseT;
   [@bs.send] external sendFile : (responseT, string, 'a) => unit = "sendFile";
-  [@bs.send] external get : (expressT, string, ('a, responseT) => unit) => unit = "get";
+  [@bs.send]
+  external get : (expressT, string, ('a, responseT) => unit) => unit = "get";
 };
 
 module Http = {
@@ -29,27 +31,29 @@ let http = Http.create(app);
 
 Express.use(app, Express.static(Path.join([|__dirname, ".."|])));
 
-Express.get(app, "/", (_, res) => Express.sendFile(res, "index.html", {"root": __dirname}));
+Express.get(app, "/", (_, res) =>
+  Express.sendFile(res, "index.html", {"root": __dirname})
+);
 
-module InnerServer = Server.Make(ExampleCommon);
+module MyServer = BsSocket.Server.Make(ExampleCommon);
 
-let io = InnerServer.createWithHttp(http);
+let io = MyServer.createWithHttp(http);
 
-InnerServer.onConnect(
+MyServer.onConnect(
   io,
-  (socket) => {
-    open InnerServer;
+  socket => {
+    open MyServer;
     print_endline("Got a connection!");
-    let socket = Socket.join(socket, "someRoom", (e) => print_endline(e));
-    let pipe = (typ, data) => {
-      Socket.broadcast(socket, typ, data);
-      Socket.emit(socket, typ, data);
-      Socket.emit(socket, ExampleCommon.UnusedMessageType, data)
-    };
+    let socket = Socket.join(socket, "someRoom", e => print_endline(e));
     /* Polymorphic pipe which actually knows about ExampleCommon.t from InnerServer */
-    Socket.on(socket, ExampleCommon.Message, pipe(ExampleCommon.Message));
-    Socket.on(socket, ExampleCommon.MessageOnEnter, pipe(ExampleCommon.MessageOnEnter))
-  }
+    Socket.on(
+      socket,
+      data => {
+        Socket.broadcast(socket, data);
+        Socket.emit(socket, data);
+      },
+    );
+  },
 );
 
 Http.listen(http, 3000, () => print_endline("listening on *:3000"));

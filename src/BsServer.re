@@ -30,9 +30,13 @@ module Make = (M: Common.M_t) => {
     ) =>
     createOptionsT =
     "";
-  [@bs.module] external createWithOptions : createOptionsT => serverT = "socket.io";
-  [@bs.module] external createWithHttpAndOption : ('a, createOptionsT) => serverT = "socket.io";
-  [@bs.module] external createWithPort : (int, createOptionsT) => serverT = "socket.io";
+  [@bs.module]
+  external createWithOptions : createOptionsT => serverT = "socket.io";
+  [@bs.module]
+  external createWithHttpAndOption : ('a, createOptionsT) => serverT =
+    "socket.io";
+  [@bs.module]
+  external createWithPort : (int, createOptionsT) => serverT = "socket.io";
 
   /*** */
   [@bs.send] external serveClient : (serverT, bool) => serverT = "serveClient";
@@ -51,19 +55,24 @@ module Make = (M: Common.M_t) => {
 
   /*** */
   [@bs.send] external origins : (serverT, string) => serverT = "origins";
-  [@bs.send] external originsWithFunc : (serverT, ('a, bool) => unit) => serverT = "origins";
+  [@bs.send]
+  external originsWithFunc : (serverT, ('a, bool) => unit) => serverT =
+    "origins";
 
   /*** */
   [@bs.send] external close : serverT => unit = "close";
 
   /*** This is the same as "server.listen". */
-  [@bs.send] external attach : (serverT, 'a, createOptionsT) => serverT = "attach";
-  [@bs.send] external attachWithPort : (serverT, int, createOptionsT) => serverT = "attach";
+  [@bs.send]
+  external attach : (serverT, 'a, createOptionsT) => serverT = "attach";
+  [@bs.send]
+  external attachWithPort : (serverT, int, createOptionsT) => serverT =
+    "attach";
 
   /*** Emit is reused below. That's why it has those abstract types. */
   [@bs.send] external _emit : ('a, string, 'b) => unit = "emit";
-  let emit = (server: serverT, t: M.t('a), obj: 'a) : unit =>
-    _emit(server, M.stringify(t), Json.toValidJson(obj));
+  let emit = (server: serverT, obj: M.t) : unit =>
+    _emit(server, "message", Json.toValidJson(obj));
 
   /***
    * socketT is the representation of a connection received by the server.
@@ -75,40 +84,47 @@ module Make = (M: Common.M_t) => {
     [@bs.get] external getHandshake : socketT => Js.t('a) = "handshake";
     /* Here 'a means that you can send anything you want, and it'll depend on
        Bucklescript */
-    [@bs.send] external _on : (socketT, [@bs.ignore] M.t('a), string, 'a => unit) => unit = "on";
-    let on = (socket, t, func) =>
-      _on(socket, t, M.stringify(t), (obj) => func(Json.fromValidJson(obj)));
+    [@bs.send] external _on : (socketT, string, M.t => unit) => unit = "on";
+    let on = (socket, func) =>
+      _on(socket, "message", obj => func(Json.fromValidJson(obj)));
 
     /*** */
-    let emit = (socket: socketT, t: M.t('a), obj: 'a) =>
-      _emit(socket, M.stringify(t), Json.toValidJson(obj));
+    let emit = (socket: socketT, obj: M.t) =>
+      _emit(socket, "message", Json.toValidJson(obj));
 
     /*** */
     type broadcastT;
-    [@bs.get] external _unsafeGetBroadcast : socketT => broadcastT = "broadcast";
-    let broadcast = (socket, str, data) =>
-      _emit(_unsafeGetBroadcast(socket), M.stringify(str), Json.toValidJson(data));
+    [@bs.get]
+    external _unsafeGetBroadcast : socketT => broadcastT = "broadcast";
+    let broadcast = (socket, data : M.t) =>
+      _emit(_unsafeGetBroadcast(socket), "message", Json.toValidJson(data));
 
     /*** */
-    [@bs.send] external join : (socketT, string, 'a => unit) => socketT = "join";
-    [@bs.send] external leave : (socketT, string, 'a => unit) => socketT = "leave";
+    [@bs.send]
+    external join : (socketT, string, 'a => unit) => socketT = "join";
+    [@bs.send]
+    external leave : (socketT, string, 'a => unit) => socketT = "leave";
     [@bs.send] external to_ : (socketT, string) => socketT = "to";
     [@bs.send] external compress : (socketT, bool) => socketT = "compress";
     [@bs.send] external disconnect : (socketT, bool) => socketT = "disconnect";
-    [@bs.send] external use : (socketT, ('a, unit => unit) => unit) => unit = "use";
+    [@bs.send]
+    external use : (socketT, ('a, unit => unit) => unit) => unit = "use";
 
     /*** */
-    [@bs.send] external _once : (socketT, string, 'b) => unit = "once";
-    let once = (socket, t, func) =>
-      _once(socket, M.stringify(t), (obj) => func(Json.fromValidJson(obj)));
+    [@bs.send] external _once : (socketT, string, M.t => unit) => unit = "once";
+    let once = (socket, func) =>
+      _once(socket, "message", obj => func(Json.fromValidJson(obj)));
 
     /*** Volatile */
     type volatileT;
     [@bs.get] external getVolatile : socketT => volatileT = "volatile";
-    [@bs.send] external _volatileEmit : (volatileT, string, 'a) => unit = "emit";
-    let volatileEmit = (server: socketT, event: M.t('a), obj: 'a) : unit =>
-      _volatileEmit(getVolatile(server), M.stringify(event), Json.toValidJson(obj));
+    [@bs.send]
+    external _volatileEmit : (volatileT, string, 'a) => unit = "emit";
+    let volatileEmit = (server: socketT, obj: M.t) : unit =>
+      _volatileEmit(getVolatile(server), "message", Json.toValidJson(obj));
   };
-  [@bs.send] external _unsafeOnConnect : (serverT, string, socketT => unit) => unit = "on";
+  [@bs.send]
+  external _unsafeOnConnect : (serverT, string, socketT => unit) => unit =
+    "on";
   let onConnect = (io, cb) => _unsafeOnConnect(io, "connection", cb);
 };

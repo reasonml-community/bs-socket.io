@@ -1,6 +1,5 @@
 {
   "name": "bs-socket",
-  "namespace": true,
   "bsc-flags": ["-w", "-20"],
   "package-specs": {
     "module": "commonjs",
@@ -9,7 +8,8 @@
   "suffix": ".bs.js",
   "sources": [
     {
-      "dir": "src"
+      "dir": "src",
+      "publicone": ["BsSocket"],
     },
     {
       "dir": "example",
