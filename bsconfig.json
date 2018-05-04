@@ -9,7 +9,7 @@
   "sources": [
     {
       "dir": "src",
-      "publicone": ["BsSocket"],
+      "public": ["BsSocket"],
     },
     {
       "dir": "example",
