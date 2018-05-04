@@ -34,17 +34,14 @@ module Make:
     let close: serverT => unit;
     let attach: (serverT, 'a, createOptionsT) => serverT;
     let attachWithPort: (serverT, int, createOptionsT) => serverT;
-    let _emit: ('a, string, 'b) => unit;
     let emit: (serverT, M.t('a), 'a) => unit;
     module Socket: {
       let getId: socketT => string;
       let getRooms: socketT => Js.t('a);
       let getHandshake: socketT => Js.t('a);
-      let _on: (socketT, M.t('a), string, 'a => unit) => unit;
       let on: (socketT, M.t('a), 'b => unit) => unit;
       let emit: (socketT, M.t('a), 'a) => unit;
       type broadcastT;
-      let _unsafeGetBroadcast: socketT => broadcastT;
       let broadcast: (socketT, M.t('a), 'b) => unit;
       let join: (socketT, string, 'a => unit) => socketT;
       let leave: (socketT, string, 'a => unit) => socketT;
@@ -52,13 +49,10 @@ module Make:
       let compress: (socketT, bool) => socketT;
       let disconnect: (socketT, bool) => socketT;
       let use: (socketT, ('a, unit => unit) => unit) => unit;
-      let _once: (socketT, string, 'b) => unit;
       let once: (socketT, M.t('a), 'b => 'c) => unit;
       type volatileT;
       let getVolatile: socketT => volatileT;
-      let _volatileEmit: (volatileT, string, 'a) => unit;
       let volatileEmit: (socketT, M.t('a), 'a) => unit;
     };
-    let _unsafeOnConnect: (serverT, string, socketT => unit) => unit;
     let onConnect: (serverT, socketT => unit) => unit;
   };
