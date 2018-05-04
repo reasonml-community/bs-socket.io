@@ -16,13 +16,13 @@ module Make:
     let clients: (t, ('a, list(string)) => unit) => unit;
 
     /*** Socket.io docs: https://socket.io/docs/server-api/#namespace-use-fn */
-    let use: (t, (BsSocket.Server.socketT, unit => unit) => unit) => unit;
+    let use: (t, (Server.socketT, unit => unit) => unit) => unit;
 
     /*** Socket.io docs: https://socket.io/docs/server-api/#server-sockets */
-    let default: BsSocket.Server.serverT => t;
+    let default: Server.serverT => t;
 
     /*** See example in Socket.io docs: https://socket.io/docs/server-api/#namespace-emit-eventname-args */
-    let of_: (BsSocket.Server.serverT, string) => t;
+    let of_: (Server.serverT, string) => t;
 
     /*** Socket.io docs: https://socket.io/docs/server-api/#namespace-to-room */
     let to_: (t, string) => t;
