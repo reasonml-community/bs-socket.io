@@ -11,13 +11,13 @@ module Make = (M: Common.M_t) => {
 
   /*** */
   [@bs.send]
-  external use : (t, (BsServer.socketT, unit => unit) => unit) => unit = "use";
+  external use : (t, (Server.socketT, unit => unit) => unit) => unit = "use";
 
   /*** */
-  [@bs.send] external default : BsServer.serverT => t = "sockets";
+  [@bs.send] external default : Server.serverT => t = "sockets";
 
   /*** This is "of" in socket.io. */
-  [@bs.send] external of_ : (BsServer.serverT, string) => t = "of";
+  [@bs.send] external of_ : (Server.serverT, string) => t = "of";
 
   /*** This is "to" in socket.io or the "in" (they're synonyms apparently) */
   [@bs.send] external to_ : (t, string) => t = "to";

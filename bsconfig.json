@@ -6,10 +6,10 @@
     "in-source": true
   },
   "suffix": ".bs.js",
+  "namespacing": true,
   "sources": [
     {
       "dir": "src",
-      "public": ["BsSocket"],
     },
     {
       "dir": "example",
