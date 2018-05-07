@@ -7,7 +7,7 @@ type room = string;
 /* This is a really thin wrapper around socket.io. I recommend checking their docs for explanation
    of how this works. */
 module Make:
-  (Messages: Common.S) =>
+  (Messages: Messages.S) =>
   {
 
     /*** These functions takes an instance of `http` from NodeJS stdlib, which you can get by simply

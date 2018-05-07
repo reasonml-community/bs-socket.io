@@ -4,7 +4,7 @@ type socketT;
 
 type room = string;
 
-module Make = (Messages: Common.S) => {
+module Make = (Messages: Messages.S) => {
   [@bs.module] external create : unit => serverT = "socket.io";
   [@bs.module] external createWithHttp : 'a => serverT = "socket.io";
 

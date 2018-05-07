@@ -1,4 +1,4 @@
-module Make = (Messages: Common.S) => {
+module Make = (Messages: Messages.S) => {
   type t;
 
   /*** Getters */

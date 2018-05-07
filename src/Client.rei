@@ -1,5 +1,5 @@
 module Make:
-  (Messages: Common.S) =>
+  (Messages: Messages.S) =>
   {
     type t;
 

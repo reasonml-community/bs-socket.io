@@ -1,4 +1,4 @@
-module Make = (Messages: Common.S) => {
+module Make = (Messages: Messages.S) => {
   type t;
   [@bs.new] external create : unit => t = "io";
   [@bs.send] external _emit : (t, string, 'a) => unit = "emit";

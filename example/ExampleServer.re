@@ -35,7 +35,7 @@ Express.get(app, "/", (_, res) =>
   Express.sendFile(res, "index.html", {"root": __dirname})
 );
 
-module MyServer = BsSocket.Server.Make(ExampleCommon);
+module MyServer = BsSocket.Server.Make(ExampleMessages);
 
 let io = MyServer.createWithHttp(http);
 

@@ -12,5 +12,4 @@
                 `stringify` is used to turn the event type to a string which is used to
                 identify the packet.
    */
-/* CR mrussell: rename module Messages */
 module type S = {type clientToServer; type serverToClient;};
