@@ -45,10 +45,6 @@ module Window = {
   external clearInterval : intervalIdT => unit = "window.clearInterval";
 };
 
-module Console = {
-  [@bs.val] external log : 'anything => unit = "console.log";
-};
-
 module MyClient = BsSocket.Client.Make(ExampleMessages);
 
 let socket = MyClient.create();
