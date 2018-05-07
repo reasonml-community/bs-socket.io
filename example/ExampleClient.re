@@ -76,7 +76,6 @@ MyClient.on(socket, x =>
       ++ s
       ++ "</div>",
     );
-    | ExampleCommon.UnusedMessageType => assert(false)
   }
 );
 

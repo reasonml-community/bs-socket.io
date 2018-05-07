@@ -1,4 +1,4 @@
-module Make = (M: Common.M_t) => {
+module Make = (Messages: Common.S) => {
   type t;
 
   /*** Getters */
@@ -24,20 +24,20 @@ module Make = (M: Common.M_t) => {
 
   /*** */
   [@bs.send] external _emit : (t, string, 'a) => unit = "emit";
-  let emit = (server: t, obj: M.t) : unit =>
+  let emit = (server: t, obj: Messages.serverToClient) : unit =>
     _emit(server, "message", Json.toValidJson(obj));
 
   /*** Volatile */
   type volatileT;
   [@bs.get] external getVolatile : t => volatileT = "volatile";
   [@bs.send] external _volatileEmit : (volatileT, string, 'a) => unit = "emit";
-  let volatileEmit = (server: t, obj: M.t) : unit =>
+  let volatileEmit = (server: t, obj: Messages.serverToClient) : unit =>
     _volatileEmit(getVolatile(server), "message", Json.toValidJson(obj));
 
   /*** Local */
   type localT;
   [@bs.get] external getLocal : t => localT = "local";
   [@bs.send] external _localEmit : (localT, string, 'a) => unit = "emit";
-  let localEmit = (server: t, obj: M.t) : unit =>
+  let localEmit = (server: t, obj: Messages.serverToClient) : unit =>
     _localEmit(getLocal(server), "message", Json.toValidJson(obj));
 };

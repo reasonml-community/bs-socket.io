@@ -4,7 +4,7 @@ type socketT;
 
 type room = string;
 
-module Make = (M: Common.M_t) => {
+module Make = (Messages: Common.S) => {
   [@bs.module] external create : unit => serverT = "socket.io";
   [@bs.module] external createWithHttp : 'a => serverT = "socket.io";
 
@@ -84,19 +84,21 @@ module Make = (M: Common.M_t) => {
     [@bs.get] external getHandshake : socketT => Js.t('a) = "handshake";
     /* Here 'a means that you can send anything you want, and it'll depend on
        Bucklescript */
-    [@bs.send] external _on : (socketT, string, M.t => unit) => unit = "on";
+    [@bs.send]
+    external _on : (socketT, string, Messages.clientToServer => unit) => unit =
+      "on";
     let on = (socket, func) =>
       _on(socket, "message", obj => func(Json.fromValidJson(obj)));
 
     /*** */
-    let emit = (socket: socketT, obj: M.t) =>
+    let emit = (socket: socketT, obj: Messages.serverToClient) =>
       _emit(socket, "message", Json.toValidJson(obj));
 
     /*** */
     type broadcastT;
     [@bs.get]
     external _unsafeGetBroadcast : socketT => broadcastT = "broadcast";
-    let broadcast = (socket, data: M.t) =>
+    let broadcast = (socket, data: Messages.serverToClient) =>
       _emit(_unsafeGetBroadcast(socket), "message", Json.toValidJson(data));
 
     /*** */
@@ -118,7 +120,8 @@ module Make = (M: Common.M_t) => {
 
     /*** */
     [@bs.send]
-    external _once : (socketT, string, M.t => unit) => unit = "once";
+    external _once : (socketT, string, Messages.serverToClient => unit) => unit =
+      "once";
     let once = (socket, func) =>
       _once(socket, "message", obj => func(Json.fromValidJson(obj)));
 
@@ -127,7 +130,7 @@ module Make = (M: Common.M_t) => {
     [@bs.get] external getVolatile : socketT => volatileT = "volatile";
     [@bs.send]
     external _volatileEmit : (volatileT, string, 'a) => unit = "emit";
-    let volatileEmit = (server: socketT, obj: M.t) : unit =>
+    let volatileEmit = (server: socketT, obj: Messages.serverToClient) : unit =>
       _volatileEmit(getVolatile(server), "message", Json.toValidJson(obj));
     let onDisconnect = (socket, cb) =>
       _on(socket, "disconnect", (_) => cb());
