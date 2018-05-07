@@ -45,7 +45,7 @@ MyServer.onConnect(
     open MyServer;
     print_endline("Got a connection!");
     let socket =
-      Socket.join(socket, "someRoom", e => Js.log2("error is:", e));
+      Socket.join(socket, "someRoom", (~err) => Js.log2("error is:", err));
     /* Polymorphic pipe which actually knows about ExampleCommon.t from InnerServer */
     Socket.on(
       socket,

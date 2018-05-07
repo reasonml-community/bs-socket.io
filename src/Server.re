@@ -96,22 +96,29 @@ module Make = (M: Common.M_t) => {
     type broadcastT;
     [@bs.get]
     external _unsafeGetBroadcast : socketT => broadcastT = "broadcast";
-    let broadcast = (socket, data : M.t) =>
+    let broadcast = (socket, data: M.t) =>
       _emit(_unsafeGetBroadcast(socket), "message", Json.toValidJson(data));
 
     /*** */
     [@bs.send]
     external join : (socketT, string, 'a => unit) => socketT = "join";
+    let join = (socket, room, onError) =>
+      join(socket, room, err => onError(~err));
     [@bs.send]
     external leave : (socketT, string, 'a => unit) => socketT = "leave";
+    let leave = (socket, room, onError) =>
+      leave(socket, room, err => onError(~err));
     [@bs.send] external to_ : (socketT, string) => socketT = "to";
     [@bs.send] external compress : (socketT, bool) => socketT = "compress";
     [@bs.send] external disconnect : (socketT, bool) => socketT = "disconnect";
     [@bs.send]
     external use : (socketT, ('a, unit => unit) => unit) => unit = "use";
+    let use = (socket, f) =>
+      use(socket, (packet, next) => f(~packet, ~next));
 
     /*** */
-    [@bs.send] external _once : (socketT, string, M.t => unit) => unit = "once";
+    [@bs.send]
+    external _once : (socketT, string, M.t => unit) => unit = "once";
     let once = (socket, func) =>
       _once(socket, "message", obj => func(Json.fromValidJson(obj)));
 
@@ -122,12 +129,11 @@ module Make = (M: Common.M_t) => {
     external _volatileEmit : (volatileT, string, 'a) => unit = "emit";
     let volatileEmit = (server: socketT, obj: M.t) : unit =>
       _volatileEmit(getVolatile(server), "message", Json.toValidJson(obj));
-
-    let onDisconnect = (socket, cb) => _on(socket, "disconnect", _ => cb());
+    let onDisconnect = (socket, cb) =>
+      _on(socket, "disconnect", (_) => cb());
   };
   [@bs.send]
   external _unsafeOnConnect : (serverT, string, socketT => unit) => unit =
     "on";
   let onConnect = (io, cb) => _unsafeOnConnect(io, "connection", cb);
-
 };
