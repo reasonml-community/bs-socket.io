@@ -49,10 +49,18 @@ MyServer.onConnect(
     /* Polymorphic pipe which actually knows about ExampleCommon.t from InnerServer */
     Socket.on(
       socket,
-      data => {
-        Socket.broadcast(socket, data);
-        Socket.emit(socket, data);
-      },
+      fun
+      | Shared(message) => {
+          Socket.broadcast(socket, message);
+          Socket.emit(socket, message);
+        }
+      | Hi => {
+          Js.log("oh, hi client.");
+          Js.log(
+            "Sorry I can't say hi back.  Try uncommenting the line below to see why.",
+          );
+          /* Socket.emit(socket, Hi); */
+        },
     );
   },
 );

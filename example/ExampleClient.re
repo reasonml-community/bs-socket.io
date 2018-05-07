@@ -53,6 +53,8 @@ module MyClient = BsSocket.Client.Make(ExampleMessages);
 
 let socket = MyClient.create();
 
+MyClient.emit(socket, Hi);
+
 let chatarea = Document.getElementById("chatarea");
 
 MyClient.on(socket, x =>
@@ -84,12 +86,18 @@ let sendbutton = Document.getElementById("sendbutton");
 let chatinput = Document.getElementById("chatinput");
 
 Element.addEventListener(sendbutton, "click", (_) =>
-  MyClient.emit(socket, Message(Data(Element.getValue(chatinput))))
+  MyClient.emit(
+    socket,
+    Shared(Message(Data(Element.getValue(chatinput)))),
+  )
 );
 
 Document.addEventListener("keyup", e =>
   if (Event.isEnterKey(e)) {
-    MyClient.emit(socket, MessageOnEnter(Element.getValue(chatinput)));
+    MyClient.emit(
+      socket,
+      Shared(MessageOnEnter(Element.getValue(chatinput))),
+    );
     Element.setValue(chatinput, "");
   }
 );
