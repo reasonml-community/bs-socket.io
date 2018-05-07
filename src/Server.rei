@@ -2,6 +2,8 @@ type serverT;
 
 type socketT;
 
+type room = string;
+
 /* This is a really thin wrapper around socket.io. I recommend checking their docs for explanation
    of how this works. */
 module Make:
@@ -63,11 +65,12 @@ module Make:
     /*** Socket.io docs: https://socket.io/docs/server-api/#socket */
     module Socket: {
 
-      /*** Socket.io docs: https://socket.io/docs/server-api/#socket-id */
-      let getId: socketT => string;
+      /*** Socket.io docs: https://socket.io/docs/server-api/#socket-id
+           A socket's unique id can be thought of as a room that has only that socket. */
+      let getId: socketT => room;
 
       /*** Socket.io docs: https://socket.io/docs/server-api/#socket-rooms */
-      let getRooms: socketT => Js.t('a);
+      let getRooms: socketT => Js.t(room);
 
       /*** Socket.io docs: https://socket.io/docs/server-api/#socket-handshake */
       let getHandshake: socketT => Js.t('a);
@@ -77,7 +80,7 @@ module Make:
            type and payload.
 
            Socket.io docs: https://socket.io/docs/server-api/#socket-on-eventname-callback */
-      let on: (socketT, 'a => unit) => unit;
+      let on: (socketT, M.t => unit) => unit;
 
       /*** Same difference as stated above.
            Socket.io docs: https://socket.io/docs/server-api/#socket-emit-eventname-args-ack */
@@ -88,13 +91,13 @@ module Make:
       let broadcast: (socketT, M.t) => unit;
 
       /*** Socket.io docs: https://socket.io/docs/server-api/#socket-join-room-callback */
-      let join: (socketT, string, 'a => unit) => socketT;
+      let join: (socketT, room, 'a => unit) => socketT;
 
       /*** Socket.io docs: https://socket.io/docs/server-api/#socket-leave-room-callback */
-      let leave: (socketT, string, 'a => unit) => socketT;
+      let leave: (socketT, room, 'a => unit) => socketT;
 
       /*** Socket.io docs: https://socket.io/docs/server-api/#socket-to-room */
-      let to_: (socketT, string) => socketT;
+      let to_: (socketT, room) => socketT;
 
       /*** Socket.io docs: https://socket.io/docs/server-api/#socket-compress-value */
       let compress: (socketT, bool) => socketT;
