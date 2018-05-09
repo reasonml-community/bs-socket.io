@@ -91,10 +91,10 @@ module Make:
       let broadcast: (socketT, Messages.serverToClient) => unit;
 
       /*** Socket.io docs: https://socket.io/docs/server-api/#socket-join-room-callback */
-      let join: (socketT, room, (~err: 'a) => unit) => socketT;
+      let join: (socketT, room, 'error => unit) => socketT;
 
       /*** Socket.io docs: https://socket.io/docs/server-api/#socket-leave-room-callback */
-      let leave: (socketT, room, (~err: 'a) => unit) => socketT;
+      let leave: (socketT, room, 'error => unit) => socketT;
 
       /*** Socket.io docs: https://socket.io/docs/server-api/#socket-to-room */
       let to_: (socketT, room) => socketT;
@@ -106,7 +106,7 @@ module Make:
       let disconnect: (socketT, bool) => socketT;
 
       /*** Socket.io docs: https://socket.io/docs/server-api/#socket-use-fn */
-      let use: (socketT, (~packet: 'a, ~next: unit => unit) => unit) => unit;
+      let use: (socketT, ('packet, ~next: unit => unit) => unit) => unit;
 
       /*** Socket.io docs: https://socket.io/docs/server-api/#socket-once-eventname-listener */
       let once: (socketT, 'a => unit) => unit;

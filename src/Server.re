@@ -103,20 +103,16 @@ module Make = (Messages: Messages.S) => {
 
     /*** */
     [@bs.send]
-    external join : (socketT, string, 'a => unit) => socketT = "join";
-    let join = (socket, room, onError) =>
-      join(socket, room, err => onError(~err));
+    external join : (socketT, string, 'error => unit) => socketT = "join";
     [@bs.send]
-    external leave : (socketT, string, 'a => unit) => socketT = "leave";
-    let leave = (socket, room, onError) =>
-      leave(socket, room, err => onError(~err));
+    external leave : (socketT, string, 'error => unit) => socketT = "leave";
     [@bs.send] external to_ : (socketT, string) => socketT = "to";
     [@bs.send] external compress : (socketT, bool) => socketT = "compress";
     [@bs.send] external disconnect : (socketT, bool) => socketT = "disconnect";
     [@bs.send]
     external use : (socketT, ('a, unit => unit) => unit) => unit = "use";
     let use = (socket, f) =>
-      use(socket, (packet, next) => f(~packet, ~next));
+      use(socket, (packet, next) => f(packet, ~next));
 
     /*** */
     [@bs.send]
