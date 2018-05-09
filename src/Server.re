@@ -102,10 +102,8 @@ module Make = (Messages: Messages.S) => {
       _emit(_unsafeGetBroadcast(socket), "message", Json.toValidJson(data));
 
     /*** */
-    [@bs.send]
-    external join : (socketT, string, 'error => unit) => socketT = "join";
-    [@bs.send]
-    external leave : (socketT, string, 'error => unit) => socketT = "leave";
+    [@bs.send] external join : (socketT, string) => socketT = "join";
+    [@bs.send] external leave : (socketT, string) => socketT = "leave";
     [@bs.send] external to_ : (socketT, string) => socketT = "to";
     [@bs.send] external compress : (socketT, bool) => socketT = "compress";
     [@bs.send] external disconnect : (socketT, bool) => socketT = "disconnect";
