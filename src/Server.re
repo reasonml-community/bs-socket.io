@@ -108,9 +108,8 @@ module Make = (Messages: Messages.S) => {
     [@bs.send] external compress : (socketT, bool) => socketT = "compress";
     [@bs.send] external disconnect : (socketT, bool) => socketT = "disconnect";
     [@bs.send]
-    external use : (socketT, ('a, unit => unit) => unit) => unit = "use";
-    let use = (socket, f) =>
-      use(socket, (packet, next) => f(packet, ~next));
+    external use : (socketT, ('a, ~next: unit => unit) => unit) => unit =
+      "use";
 
     /*** */
     [@bs.send]
