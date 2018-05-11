@@ -3,7 +3,7 @@ type serverT;
 type socketT;
 
 module Make:
-  (M: BsSocket.Common.M_t) =>
+  (M: Common.M_t) =>
   {
     let create: unit => serverT;
     let createWithHttp: 'a => serverT;

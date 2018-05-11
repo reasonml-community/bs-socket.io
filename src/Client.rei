@@ -1,5 +1,5 @@
 module Make:
-  (M: BsSocket.Common.M_t) =>
+  (M: Common.M_t) =>
   {
     type t;
     let create: unit => t;
