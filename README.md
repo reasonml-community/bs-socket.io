@@ -12,11 +12,10 @@ Everything lives under the namespace BsSocket.
 ```reason
 module MyServer = BsSocket.Server.Make({
   type t = ...;
-  type stringify = ...;
 });
 ```
 
-See `example/` folder for more.
+See `example/` folder for full usage.
 
 The API reflects socket.io's API. Generally, e.g. JavaScript's `socket.emit("bla", 10)` becomes `Server.emit(socket, "bla", 10)` in Reason.
 
