@@ -1,5 +1,5 @@
 module Make:
-  (M: Common.M_t) =>
+  (Messages: Messages.S) =>
   {
     type t;
 
@@ -28,15 +28,15 @@ module Make:
     let to_: (t, string) => t;
 
     /*** Socket.io docs: https://socket.io/docs/server-api/#namespace-emit-eventname-args */
-    let emit: (t, M.t) => unit;
+    let emit: (t, Messages.serverToClient) => unit;
 
     /*** Socket.io docs: https://socket.io/docs/server-api/#flag-volatile */
     type volatileT;
     let getVolatile: t => volatileT;
-    let volatileEmit: (t, M.t) => unit;
+    let volatileEmit: (t, Messages.serverToClient) => unit;
 
     /*** Socket.io docs: https://socket.io/docs/server-api/#flag-local */
     type localT;
     let getLocal: t => localT;
-    let localEmit: (t, M.t) => unit;
+    let localEmit: (t, Messages.serverToClient) => unit;
   };

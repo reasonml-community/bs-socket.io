@@ -45,19 +45,17 @@ module Window = {
   external clearInterval : intervalIdT => unit = "window.clearInterval";
 };
 
-module Console = {
-  [@bs.val] external log : 'anything => unit = "console.log";
-};
-
-module MyClient = BsSocket.Client.Make(ExampleCommon);
+module MyClient = BsSocket.Client.Make(ExampleMessages);
 
 let socket = MyClient.create();
+
+MyClient.emit(socket, Hi);
 
 let chatarea = Document.getElementById("chatarea");
 
 MyClient.on(socket, x =>
   switch (x) {
-  | ExampleCommon.Message(Data(s)) =>
+  | Message(Data(s)) =>
     let innerHTML = Element.getInnerHTML(chatarea);
     Element.setInnerHTML(
       chatarea,
@@ -66,8 +64,8 @@ MyClient.on(socket, x =>
       ++ s
       ++ "</div>",
     );
-  | ExampleCommon.Message(OrOthers) => print_endline("OrOthers")
-  | ExampleCommon.MessageOnEnter(s) =>
+  | Message(OrOthers) => print_endline("OrOthers")
+  | MessageOnEnter(s) =>
     let innerHTML = Element.getInnerHTML(chatarea);
     Element.setInnerHTML(
       chatarea,
@@ -76,21 +74,9 @@ MyClient.on(socket, x =>
       ++ s
       ++ "</div>",
     );
-    | ExampleCommon.UnusedMessageType => assert(false)
   }
 );
 
-/*MyClient.on(
-    socket,
-    ExampleCommon.MessageOnEnter,
-    (s) => {
-      let innerHTML = Element.getInnerHTML(chatarea);
-      Element.setInnerHTML(
-        chatarea,
-        innerHTML ++ "<div><span style='color:red'>MessageOnEnter</span>: " ++ s ++ "</div>"
-      )
-    }
-  );*/
 let sendbutton = Document.getElementById("sendbutton");
 
 let chatinput = Document.getElementById("chatinput");
@@ -98,7 +84,7 @@ let chatinput = Document.getElementById("chatinput");
 Element.addEventListener(sendbutton, "click", (_) =>
   MyClient.emit(
     socket,
-    ExampleCommon.Message(ExampleCommon.Data(Element.getValue(chatinput))),
+    Shared(Message(Data(Element.getValue(chatinput)))),
   )
 );
 
@@ -106,7 +92,7 @@ Document.addEventListener("keyup", e =>
   if (Event.isEnterKey(e)) {
     MyClient.emit(
       socket,
-      ExampleCommon.MessageOnEnter(Element.getValue(chatinput)),
+      Shared(MessageOnEnter(Element.getValue(chatinput))),
     );
     Element.setValue(chatinput, "");
   }

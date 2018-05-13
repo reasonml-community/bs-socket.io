@@ -1,5 +1,5 @@
 module Make:
-  (M: Common.M_t) =>
+  (Messages: Messages.S) =>
   {
     type t;
 
@@ -8,9 +8,9 @@ module Make:
 
     /*** Same as the server-side `emit`, doesn't take a message name.
          The recommended payload type to send is a variant wSocket.io docs: https://socket.io/docs/client-api/#socket-emit-eventname-args-ack */
-    let emit: (t, M.t) => unit;
+    let emit: (t, Messages.clientToServer) => unit;
 
     /*** Same ideas as explained above.
          Socket.io docs: https://socket.io/docs/client-api/#socket-on-eventname-callback */
-    let on: (t, M.t => unit) => unit;
+    let on: (t, Messages.serverToClient => unit) => unit;
   };

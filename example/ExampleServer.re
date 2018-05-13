@@ -35,7 +35,7 @@ Express.get(app, "/", (_, res) =>
   Express.sendFile(res, "index.html", {"root": __dirname})
 );
 
-module MyServer = BsSocket.Server.Make(ExampleCommon);
+module MyServer = BsSocket.Server.Make(ExampleMessages);
 
 let io = MyServer.createWithHttp(http);
 
@@ -44,14 +44,22 @@ MyServer.onConnect(
   socket => {
     open MyServer;
     print_endline("Got a connection!");
-    let socket = Socket.join(socket, "someRoom", e => print_endline(e));
+    let socket = Socket.join(socket, "someRoom");
     /* Polymorphic pipe which actually knows about ExampleCommon.t from InnerServer */
     Socket.on(
       socket,
-      data => {
-        Socket.broadcast(socket, data);
-        Socket.emit(socket, data);
-      },
+      fun
+      | Shared(message) => {
+          Socket.broadcast(socket, message);
+          Socket.emit(socket, message);
+        }
+      | Hi => {
+          Js.log("oh, hi client.");
+          Js.log(
+            "Sorry I can't say hi back.  Try uncommenting the line below to see why.",
+          );
+          /* Socket.emit(socket, Hi); */
+        },
     );
   },
 );
