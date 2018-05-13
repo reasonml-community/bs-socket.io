@@ -17,9 +17,9 @@ module MyServer = BsSocket.Server.Make({
 
 See `example/` folder for full usage.
 
-The API reflects socket.io's API. Generally, e.g. JavaScript's `socket.emit("bla", 10)` becomes `Server.emit(socket, "bla", 10)` in Reason.
+The API differs a bit from socket.io's API to be more idiomatic in Reason. Generally, e.g. JavaScript's `socket.emit("bla", 10)` becomes `Server.emit(socket, Bla(10))` in Reason.
 
-To create a server/client/namespace, use `Server.Make`, `Client.Make` and `Namespace.Make` respectively. These functors take a module that contains 2 things: a type called `t` and a function called `stringify`. This allows ocaml to typecheck the messages that you send back and forth between the server and the client. ie: you can only listen to/send messages that the server can listen to/send too.
+To create a server/client/namespace, use `Server.Make`, `Client.Make` and `Namespace.Make` respectively. These functors take a module that contains 1 things: a type called `t`. This allows ocaml to typecheck the messages that you send back and forth between the server and the client. ie: you can only listen to/send messages that the server can listen to/send too.
 
 ## Couple Gotchas
 
