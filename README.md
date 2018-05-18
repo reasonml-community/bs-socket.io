@@ -21,7 +21,7 @@ module Messages = {
   type clientToServer = 
   | Login(username);
   type serverToClient = 
-  | LoginSuccessful(bool);
+  | LoginSuccessful(username, bool);
 };
 module MyServer = BsSocket.Server.Make(Messages);
 let io = MyServer.create();
