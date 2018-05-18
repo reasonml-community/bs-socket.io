@@ -58,8 +58,8 @@ possibly be sent.
 As a concrete example, the following socket.io and bs-socket.io pseudo-code
 would be analogous to each other.
 
+Socket.io:
 ```javascript
-// socket.io 
 // client
 socket.emit('login', { username: 'user2157' });
 socket.emit('chat message', 'hello');
@@ -69,8 +69,8 @@ socket.on('login', msg => ...);
 socket.on('chat message', msg => ...);
 ```
 
+Bs-socket.io:
 ```reason
-// bs-socket.io 
 // client
 MyClient.emit(Login("user2157"));
 MyClient.emit(ChatMessage("hello"));
