@@ -11,11 +11,11 @@ Everything lives under the namespace BsSocket.
 
 ```reason
 module Messages = {
-    type username = string;
-	type clientToServer = 
-	| Login(username);
-	type serverToClient = 
-	| LoginSuccessful(bool);
+  type username = string;
+  type clientToServer = 
+  | Login(username);
+  type serverToClient = 
+  | LoginSuccessful(bool);
 };
 module MyServer = BsSocket.Server.Make(Messages);
 let io = MyServer.create();
