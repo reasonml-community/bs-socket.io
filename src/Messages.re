@@ -36,6 +36,6 @@
    particular message types in mind.  For example:
 
                       module MyServer = Server.Make(Messages)
-                      let io = Server.create();
+                      let io = MyServer.create();
    */
 module type S = {type clientToServer; type serverToClient;};
