@@ -27,7 +27,7 @@ The API reflects socket.io's API. Generally, e.g. JavaScript's `socket.emit("bla
 
 To create a server/client/namespace, use `Server.Make`, `Client.Make` and `Namespace.Make` respectively. These functors take a module that contains 2 things: a type called `clientToServer` and a type called `serverToClient`, which define the type of the message that the client will send to the server and vice versa.  A common pattern is to use the same message type for `clientToServer` and `serverToClient` in the following way:
 
-```
+```reason
 module Messages = {
   type t = | ...;
   type clientToServer = t;
@@ -50,7 +50,7 @@ possibly be sent.
 As a concrete example, the following socket.io and bs-socket.io pseudo-code
 would be analogous to each other.
 
-```
+```javascript
 // socket.io 
 // client
 socket.emit('login', { username: 'user2157' });
@@ -61,7 +61,7 @@ socket.on('login', msg => ...);
 socket.on('chat message', msg => ...);
 ```
 
-```
+```reason
 // bs-socket.io 
 // client
 MyClient.emit(Login("2157"));
@@ -77,7 +77,7 @@ MyServer.on(socket, msg =>
 
 If you later extended the type of `clientToServer` to have another case, i.e.
 
-```
+```reason
 type username = string;
 type clientToServer = 
   | Login(username)
