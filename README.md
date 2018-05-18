@@ -72,11 +72,11 @@ socket.on('chat message', msg => ...);
 Bs-socket.io:
 ```reason
 // client
-MyClient.emit(Login("user2157"));
-MyClient.emit(ChatMessage("hello"));
+MyClient.emit(client, Login("user2157"));
+MyClient.emit(client, ChatMessage("hello"));
 
 // server
-MyServer.on(socket, msg => 
+MyServer.Socket.on(socket, msg => 
   switch(msg) {
   | Login(username) => ...
   | ChatMessage(msg) => ...
