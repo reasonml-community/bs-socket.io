@@ -29,7 +29,7 @@ To create a server/client/namespace, use `Server.Make`, `Client.Make` and `Names
 
 ```reason
 module Messages = {
-  type t = | ...;
+  type t = ...;
   type clientToServer = t;
   type serverToClient = t;
 };
