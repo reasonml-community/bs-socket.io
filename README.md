@@ -7,8 +7,14 @@ To build everything run `npm run build` and to run the demo run `npm run run` an
 
 # Documentation
 
-Everything lives under the namespace BsSocket.
+Everything lives under the namespace BsSocket.  To create a
+server/client/namespace, use `Server.Make`, `Client.Make` and
+`Namespace.Make` respectively. These functors take a module that
+contains 2 things: a type called `clientToServer` and a type called
+`serverToClient`, which define the type of the message that the client
+will send to the server and vice versa.
 
+For example:
 ```reason
 module Messages = {
   type username = string;
@@ -21,11 +27,7 @@ module MyServer = BsSocket.Server.Make(Messages);
 let io = MyServer.create();
 ```
 
-See `example/` folder for more.
-
-The API reflects socket.io's API. Generally, e.g. JavaScript's `socket.emit("bla", 10)` becomes `Server.emit(socket, "bla", 10)` in Reason.
-
-To create a server/client/namespace, use `Server.Make`, `Client.Make` and `Namespace.Make` respectively. These functors take a module that contains 2 things: a type called `clientToServer` and a type called `serverToClient`, which define the type of the message that the client will send to the server and vice versa.  A common pattern is to use the same message type for `clientToServer` and `serverToClient` in the following way:
+A common pattern is to use the same message type for `clientToServer` and `serverToClient` in the following way:
 
 ```reason
 module Messages = {
@@ -34,6 +36,12 @@ module Messages = {
   type serverToClient = t;
 };
 ```
+
+See `example/` folder for more.
+
+The API reflects socket.io's API. Generally, e.g. JavaScript's
+`socket.emit("bla", 10)` becomes `Server.emit(socket, Bla(10))` in
+Reason.
 
 ## Conceptual difference between socket.io and bs-socket.io
 
@@ -64,7 +72,7 @@ socket.on('chat message', msg => ...);
 ```reason
 // bs-socket.io 
 // client
-MyClient.emit(Login("2157"));
+MyClient.emit(Login("user2157"));
 MyClient.emit(ChatMessage("hello"));
 
 // server
@@ -86,8 +94,8 @@ type clientToServer =
 ```
 
 Then the previous implementation of `MyServer.on` would no longer
-compile with the reason that you haven't handled the case where the
-message is `Logout`.
+compile with the reason that you haven't handled the `Logout` variant
+of the `clientToServer` type.
 
 ## Couple Gotchas
 
