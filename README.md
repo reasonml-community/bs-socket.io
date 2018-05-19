@@ -37,11 +37,11 @@ module Messages = {
 };
 ```
 
-See `example/` folder for more.
+See `example/` folder for full usage.
 
-The API reflects socket.io's API. Generally, e.g. JavaScript's
-`socket.emit("bla", 10)` becomes `Server.emit(socket, Bla(10))` in
-Reason.
+The API differs a bit from socket.io's API to be more idiomatic in
+Reason. Generally, e.g. JavaScript's `socket.emit("bla", 10)` becomes
+`Server.emit(socket, Bla(10))` in Reason.
 
 ## Conceptual difference between socket.io and bs-socket.io
 
