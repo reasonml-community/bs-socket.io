@@ -1,6 +1,7 @@
 module Make = (Messages: Messages.S) => {
   type t;
   [@bs.new] external create : unit => t = "io";
+  [@bs.new] external createWithUrl : string => t = "io";
   [@bs.send] external _emit : (t, string, 'a) => unit = "emit";
   let emit = (socket, obj: Messages.clientToServer) =>
     _emit(socket, "message", Json.toValidJson(obj));
