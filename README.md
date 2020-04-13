@@ -5,7 +5,7 @@ Simple bindings to [socket.io](https://socket.io/).
 
 I've you're having `bs-platform` installed globally, then do `npm link bs-platform` once. 
 
-To build everything run `npm install`, then `npm run build` and to run the demo run `npm run run` and go to `localhost:3000` on two tabs. You can send messages back and forth!
+To build everything run `npm install` then `npm run build` and to run the demo run `npm run run` and go to `localhost:3000` on two tabs. You can send messages back and forth!
 
 # Documentation
 
