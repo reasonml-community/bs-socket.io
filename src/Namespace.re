@@ -1,43 +1,38 @@
-module Make = (Messages: Messages.S) => {
-  type t;
+type t;
 
-  /*** Getters */
-  [@bs.get] external getName : t => string = "name";
-  [@bs.get] external getAdapter : t => 'a = "adapter";
-  /* Returns a JS object with socket IDs as keys. */
-  [@bs.get] external getConnected : t => Js.t('a) = "connected";
-  [@bs.send]
-  external clients : (t, ('a, list(string)) => unit) => unit = "clients";
+/* Socket.io docs: https://socket.io/docs/server-api/#namespace-name */
+[@bs.get] external getName: t => string = "name";
 
-  /*** */
-  [@bs.send]
-  external use : (t, (Server.socketT, unit => unit) => unit) => unit = "use";
+/* Socket.io docs: https://socket.io/docs/server-api/#namespace-adapter */
+[@bs.get] external getAdapter: t => 'a = "adapter";
 
-  /*** */
-  [@bs.send] external default : Server.serverT => t = "sockets";
+/* Socket.io docs: https://socket.io/docs/server-api/#namespace-connected */
+[@bs.get] external getConnected: t => Js.t('a) = "connected";
 
-  /*** This is "of" in socket.io. */
-  [@bs.send] external of_ : (Server.serverT, string) => t = "of";
+/* Socket.io docs: https://socket.io/docs/server-api/#namespace-clients-callback */
+[@bs.send] external clients: (t, ('a, list(string)) => unit) => unit = "clients";
 
-  /*** This is "to" in socket.io or the "in" (they're synonyms apparently) */
-  [@bs.send] external to_ : (t, string) => t = "to";
+/* Socket.io docs: https://socket.io/docs/server-api/#namespace-use-fn */
+[@bs.send] external use: (t, (Socket.socketT, unit => unit) => unit) => unit = "use";
 
-  /*** */
-  [@bs.send] external _emit : (t, string, 'a) => unit = "emit";
-  let emit = (server: t, obj: Messages.serverToClient) : unit =>
-    _emit(server, "message", Json.toValidJson(obj));
+/* Socket.io docs: https://socket.io/docs/server-api/#server-sockets */
+[@bs.send] external default: Server.serverT => t = "sockets";
 
-  /*** Volatile */
-  type volatileT;
-  [@bs.get] external getVolatile : t => volatileT = "volatile";
-  [@bs.send] external _volatileEmit : (volatileT, string, 'a) => unit = "emit";
-  let volatileEmit = (server: t, obj: Messages.serverToClient) : unit =>
-    _volatileEmit(getVolatile(server), "message", Json.toValidJson(obj));
+/* See example in Socket.io docs: https://socket.io/docs/server-api/#namespace-emit-eventname-args */
+[@bs.send] external of_: (Server.serverT, string) => t = "of";
 
-  /*** Local */
-  type localT;
-  [@bs.get] external getLocal : t => localT = "local";
-  [@bs.send] external _localEmit : (localT, string, 'a) => unit = "emit";
-  let localEmit = (server: t, obj: Messages.serverToClient) : unit =>
-    _localEmit(getLocal(server), "message", Json.toValidJson(obj));
-};
+/* Socket.io docs: https://socket.io/docs/server-api/#namespace-to-room */
+[@bs.send] external to_: (t, string) => t = "to";
+
+/* Socket.io docs: https://socket.io/docs/server-api/#namespace-emit-eventname-args */
+[@bs.send] external emit: (t, string, 'a) => unit = "emit";
+
+/* Socket.io docs: https://socket.io/docs/server-api/#flag-volatile */
+type volatileT;
+[@bs.get] external getVolatile: t => volatileT = "volatile";
+[@bs.send] external emitVolatile: (volatileT, string, 'a) => unit = "emit";
+
+/* Socket.io docs: https://socket.io/docs/server-api/#flag-local */
+type localT;
+[@bs.get] external getLocal: t => localT = "local";
+[@bs.send] external emitLocal: (localT, string, 'a) => unit = "emit";

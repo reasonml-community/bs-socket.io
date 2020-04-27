@@ -1,15 +1,13 @@
 {
   "name": "bs-socket",
-  "bsc-flags": ["-w", "-20"],
   "package-specs": {
     "module": "commonjs",
     "in-source": true
   },
   "suffix": ".bs.js",
-  "namespace": true,
   "sources": [
     {
-      "dir": "src",
+      "dir": "src"
     },
     {
       "dir": "example",
