@@ -9,3 +9,5 @@
 module Server = Server;
 module Client = Client;
 module Namespace = Namespace;
+
+module V2 = V2;
