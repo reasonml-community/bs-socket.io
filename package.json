@@ -10,11 +10,11 @@
     "run": "node example/ExampleServer.bs.js"
   },
   "dependencies": {
-    "socket.io": "^1.4.8"
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
     "express": "^4.14.0",
-    "bs-platform": "^3.0.0"
+    "bs-platform": "7.1.1"
   },
   "author": "Benjamin San Souci <benjamin.sansouci@gmail.com>"
 }
