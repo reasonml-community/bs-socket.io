@@ -10,7 +10,7 @@
     "run": "node example/ExampleServer.bs.js"
   },
   "dependencies": {
-    "socket.io": "^1.4.8"
+    "socket.io": "^2.4.0"
   },
   "devDependencies": {
     "express": "^4.14.0",
